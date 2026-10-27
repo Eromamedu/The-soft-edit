@@ -9,8 +9,8 @@ import AllProductsPage from "./pages/AllProductsPage";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import {
   ArrowDown,
-  ArrowRight,
-  ArrowLeft,
+  // ArrowRight,
+  // ArrowLeft,
   // ArrowUpRight,
    ArrowUpRight,
    
@@ -22,8 +22,8 @@ import {
   // Truck,
   CreditCard,
   // Heart,
-  ArrowDownRight,
-  CircleArrowRight,
+  // ArrowDownRight,
+  // CircleArrowRight,
   Flower2,
   // Instagram,
   Minus,
@@ -31,15 +31,15 @@ import {
   ShieldCheck,
   Truck,
   Check,
-  ChevronDown,
+  // ChevronDown,
   Heart,
   // Menu,
-    Leaf,
+    // Leaf,
   Search,
   ShoppingBag,
   Sparkles,
   ShoppingCart,
-  UserRound,
+  // UserRound,
   // MailIcon
   // Insta,
   X,
@@ -140,36 +140,36 @@ const products: Product[] = [
   },
 ];
 
-const accountLinks = [
-  { label: "Account Home", href: "/account" },
-  { label: "My Wishlist", href: "/account/wishlist" },
-  { label: "My Orders", href: "/account/orders" },
-  { label: "My Subscriptions", href: "/account/subscriptions" },
-  { label: "My Referrals", href: "/account/referrals" },
-];
+// const accountLinks = [
+//   { label: "Account Home", href: "/account" },
+//   { label: "My Wishlist", href: "/account/wishlist" },
+//   { label: "My Orders", href: "/account/orders" },
+//   { label: "My Subscriptions", href: "/account/subscriptions" },
+//   { label: "My Referrals", href: "/account/referrals" },
+// ];
 
-const promises = [
-  {
-    number: "01",
-    title: "THOUGHTFULLY CHOSEN",
-    description: "Less noise, more meaning.",
-  },
-  {
-    number: "02",
-    title: "SKIN FIRST",
-    description: "Care that starts with you.",
-  },
-  {
-    number: "03",
-    title: "EVERYDAY RITUALS",
-    description: "Little moments, just for you.",
-  },
-  {
-    number: "04",
-    title: "BEAUTY FOR EVERYONE",
-    description: "Your skin, your story.",
-  },
-];
+// const promises = [
+//   {
+//     number: "01",
+//     title: "THOUGHTFULLY CHOSEN",
+//     description: "Less noise, more meaning.",
+//   },
+//   {
+//     number: "02",
+//     title: "SKIN FIRST",
+//     description: "Care that starts with you.",
+//   },
+//   {
+//     number: "03",
+//     title: "EVERYDAY RITUALS",
+//     description: "Little moments, just for you.",
+//   },
+//   {
+//     number: "04",
+//     title: "BEAUTY FOR EVERYONE",
+//     description: "Your skin, your story.",
+//   },
+// ];
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat("en-GB", {

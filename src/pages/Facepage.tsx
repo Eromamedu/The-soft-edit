@@ -2,8 +2,8 @@
 import { useMemo, useState } from "react";
 import {
   ArrowDown,
-  ArrowLeft,
-  ArrowRight,
+  // ArrowLeft,
+  // ArrowRight,
   ArrowUpRight,
   Check,
   ChevronDown,
