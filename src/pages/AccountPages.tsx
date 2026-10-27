@@ -13,7 +13,7 @@ import {
   Sparkles,
   UserRound,
 } from "lucide-react";
-import AccountDashboard from "./AccountDashboard";
+// import AccountDashboard from "./AccountDashboard";
 import { supabase } from "../lib/supabase";
 
 type AccountPageProps = {

@@ -66,8 +66,8 @@ type Product = {
   category: string;
   price: number;
   image: string;
-  tag: string;
-  color: string;
+  tag?: string;
+  color?: string;
 };
 
 const categories = [
