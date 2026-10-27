@@ -788,9 +788,9 @@ export default function AccountPages({
     return <RegisterPage />;
   }
 
-  if (path === "/account") {
-    return <AccountDashboard  />;
-  }
+  // if (path === "/account") {
+  //   return <AccountDashboard  />;
+  // }
 
   return <>{children}</>;
 }
