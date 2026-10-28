@@ -5849,1521 +5849,2415 @@ function Hero({
   showHeroBanner = true,
   headerVariant = "home",
 }: HeaderProps) {
-
   const [videoFinished, setVideoFinished] = useState(false);
-
   const [activeImageIndex, setActiveImageIndex] = useState(0);
-
-
-
   const [searchQuery, setSearchQuery] = useState("");
-
-
-
   const [searchFocused, setSearchFocused] = useState(false);
-
   const [searchOpen, setSearchOpen] = useState(false);
-
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-const activePathByVariant: Record<NonNullable<HeaderProps["headerVariant"]>, string> = {
-
+  const activePathByVariant: Record<
+    NonNullable<HeaderProps["headerVariant"]>,
+    string
+  > = {
     home: "/",
-
     serum: "/serum",
-
     "face-creams": "/face-creams",
-
     "body-creams": "/body-creams",
-
     "all-products": "/all-products",
-
   };
 
   const searchContainerRef = useRef<HTMLDivElement>(null);
-
+  const mobileSearchContainerRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
-
+  const mobileSearchRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-
   const videoFailedRef = useRef(false);
-
-
-
-  // The nav link for the page you are on keeps its gold underline.
-
-  // Every link you click becomes the active one immediately, and it is
-
-  // remembered so it survives the page changing underneath the header.
 
   const navHrefs = ["/", ...heroNavigation.map((item) => item.href)];
 
-
-
   const [activeHref, setActiveHref] = useState<string>(() => {
-
     try {
-
       const path = window.location.pathname.replace(/\/+$/, "") || "/";
-
-
 
       if (path !== "/" && navHrefs.includes(path)) return path;
 
-
-
       const stored = window.sessionStorage.getItem("softEditActiveNav");
 
-
-
       if (stored && navHrefs.includes(stored)) return stored;
-
     } catch {
-
-      // Storage or window can be unavailable; fall back to the page variant.
-
+      // Storage or window can be unavailable.
     }
-
-
 
     return activePathByVariant[headerVariant];
-
   });
 
-
-
   useEffect(() => {
-
     try {
-
       window.sessionStorage.setItem("softEditActiveNav", activeHref);
-
     } catch {
-
       // Ignore storage errors.
-
     }
-
   }, [activeHref]);
 
-
-
-  // Browser back / forward buttons move the underline too.
-
   useEffect(() => {
-
     function handlePopState() {
-
       const path = window.location.pathname.replace(/\/+$/, "") || "/";
-
-
-
       if (navHrefs.includes(path)) setActiveHref(path);
-
     }
-
-
 
     window.addEventListener("popstate", handlePopState);
 
-
-
     return () => window.removeEventListener("popstate", handlePopState);
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-
   }, []);
-
-
 
   const currentSlide = {
-
     eyebrow: "THE ART OF EVERYDAY SKINCARE",
-
     title: ["Your skin,", "your soft ritual."],
-
     description:
-
       "Thoughtful skincare for the moments that are just for you. Discover your next everyday essential with The Soft Edit.",
-
     button: "DISCOVER THE COLLECTION",
-
     signature: "A softer kind of glow",
-
   };
 
-
-
   const searchResults = searchQuery.trim()
-
     ? products
-
         .filter((product) =>
-
           `${product.name} ${product.category}`
-
             .toLowerCase()
-
             .includes(searchQuery.trim().toLowerCase()),
-
         )
-
         .slice(0, 4)
-
     : [];
 
-
-
-  // Change the navigation appearance as the page scrolls.
-
   useEffect(() => {
-
     const handleScroll = () => {
-
       setIsScrolled(window.scrollY > 40);
-
     };
-
-
 
     handleScroll();
-
-
-
     window.addEventListener("scroll", handleScroll, { passive: true });
 
-
-
-    return () => {
-
-      window.removeEventListener("scroll", handleScroll);
-
-    };
-
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-
-
-  // The video leads for six seconds, then every image shows one after the other,
-
-  // then the video plays again — and the whole story repeats continuously.
-
+  // Video first, then cycle through the campaign images.
   useEffect(() => {
-
     if (!showHeroBanner || !videoFinished) return;
 
-
-
     const slideTimeout = window.setTimeout(() => {
-
       const isLastImage = activeImageIndex >= heroImageSlides.length - 1;
 
-
-
       if (isLastImage && !videoFailedRef.current) {
-
-        // All images have shown: bring the video back from the start.
-
         const video = videoRef.current;
 
-
-
         if (video) {
-
           video.currentTime = 0;
-
           video.play().catch(() => {});
-
         }
 
-
-
         setActiveImageIndex(0);
-
         setVideoFinished(false);
-
       } else {
-
-        setActiveImageIndex((current) => (current + 1) % heroImageSlides.length);
-
+        setActiveImageIndex(
+          (current) => (current + 1) % heroImageSlides.length,
+        );
       }
-
     }, 3200);
 
-
-
     return () => window.clearTimeout(slideTimeout);
-
   }, [showHeroBanner, videoFinished, activeImageIndex]);
 
-
-
   useEffect(() => {
-
     if (showHeroBanner) {
-
       setVideoFinished(false);
-
       setActiveImageIndex(0);
-
     }
-
   }, [showHeroBanner]);
 
-
-
+  // Escape closes both search interfaces and the mobile menu.
   useEffect(() => {
-
     function handleEscape(event: KeyboardEvent) {
-
       if (event.key === "Escape") {
-
         setSearchFocused(false);
-
         setSearchOpen(false);
-
-        setSearchQuery("");
-
+        setMobileSearchOpen(false);
+        setMobileMenuOpen(false);
       }
-
     }
-
-
 
     document.addEventListener("keydown", handleEscape);
 
-
-
-    return () => {
-
-      document.removeEventListener("keydown", handleEscape);
-
-    };
-
+    return () => document.removeEventListener("keydown", handleEscape);
   }, []);
 
-
-
+  // Close the appropriate search when the user clicks outside it.
   useEffect(() => {
-
-    const handleOutsideClick = (event: MouseEvent) => {
-
-      const searchContainer = searchContainerRef.current;
-
-
+    function handleOutsideClick(event: MouseEvent) {
+      const target = event.target as Node;
 
       if (
-
-        searchOpen &&
-
-        searchContainer &&
-
-        !searchContainer.contains(event.target as Node)
-
+        mobileSearchOpen &&
+        mobileSearchContainerRef.current &&
+        !mobileSearchContainerRef.current.contains(target)
       ) {
-
-        setSearchOpen(false);
-
+        setMobileSearchOpen(false);
         setSearchFocused(false);
-
       }
 
-    };
-
-
+      if (
+        searchOpen &&
+        searchContainerRef.current &&
+        !searchContainerRef.current.contains(target)
+      ) {
+        setSearchOpen(false);
+        setSearchFocused(false);
+      }
+    }
 
     document.addEventListener("click", handleOutsideClick, true);
 
-
-
     return () => {
-
       document.removeEventListener("click", handleOutsideClick, true);
-
     };
-
-  }, [searchOpen]);
-
-
+  }, [searchOpen, mobileSearchOpen]);
 
   function closeNavigation() {
-
     setSearchFocused(false);
-
   }
 
-
-
   function openProduct(productId: string | number) {
-
     closeNavigation();
-
     setSearchOpen(false);
-
-
+    setMobileSearchOpen(false);
 
     const productElement = document.getElementById(`product-${productId}`);
 
-
-
     if (productElement) {
-
       productElement.scrollIntoView({
-
         behavior: "smooth",
-
         block: "center",
-
       });
-
     } else {
-
       document.getElementById("shop")?.scrollIntoView({
-
         behavior: "smooth",
-
         block: "start",
-
       });
-
     }
-
   }
 
-
-
   function handleSearch(event: FormEvent<HTMLFormElement>) {
-
     event.preventDefault();
-
-
 
     const query = searchQuery.trim().toLowerCase();
 
-
-
     if (!query) {
-
-      searchRef.current?.focus();
-
+      if (mobileSearchOpen) {
+        mobileSearchRef.current?.focus();
+      } else {
+        searchRef.current?.focus();
+      }
       return;
-
     }
-
-
 
     const matchingProduct = products.find((product) =>
-
       `${product.name} ${product.category}`.toLowerCase().includes(query),
-
     );
 
-
-
     setSearchFocused(false);
-
-
+    setSearchOpen(false);
+    setMobileSearchOpen(false);
 
     if (matchingProduct) {
-
       openProduct(matchingProduct.id);
-
     } else {
-
       closeNavigation();
 
-      setSearchOpen(false);
-
-
-
       document.getElementById("shop")?.scrollIntoView({
-
         behavior: "smooth",
-
         block: "start",
-
       });
-
     }
-
   }
-
-
 
   return (
-
     <section id="home" className="relative w-full">
-
-      {/* <div
-
-        className="hero-frame group relative isolate min-h-[650px] w-full overflow-hidden bg-[#30232F] sm:min-h-[720px] lg:min-h-[800px]"
-
-        aria-label="The Soft Edit skincare campaign video"
-
-      > */}
-
       <div
-
-  className={`group relative w-full ${
-
-    showHeroBanner
-
-      ? "hero-frame isolate min-h-[650px] overflow-hidden bg-[#30232F] sm:min-h-[720px] lg:min-h-[800px]"
-
-      : "h-0 overflow-visible"
-
-  }`}
-
-  aria-label={
-
-    showHeroBanner
-
-      ? "The Soft Edit skincare campaign video"
-
-      : "The Soft Edit navigation"
-
-  }
-
->
-
-        {/* FULL-WIDTH HERO: VIDEO FIRST, THEN THE FULL-BLEED IMAGE STORY */}
-
+        className={`group relative w-full ${
+          showHeroBanner
+            ? "hero-frame isolate min-h-[650px] overflow-hidden bg-[#30232F] sm:min-h-[720px] lg:min-h-[800px]"
+            : "h-0 overflow-visible"
+        }`}
+        aria-label={
+          showHeroBanner
+            ? "The Soft Edit skincare campaign video"
+            : "The Soft Edit navigation"
+        }
+      >
+        {/* HERO VIDEO AND CAMPAIGN IMAGES */}
         {showHeroBanner && (
-
           <>
-
-            {/* The video leads for six seconds before the image sequence takes over. */}
-
             <video
-
               ref={videoRef}
-
               autoPlay
-
               muted
-
               playsInline
-
               preload="auto"
-
               aria-label="The Soft Edit luxury skincare campaign"
-
               onTimeUpdate={(event) => {
-
                 if (event.currentTarget.currentTime >= 6) {
-
                   event.currentTarget.pause();
-
                   setVideoFinished(true);
-
                 }
-
               }}
-
               onEnded={() => setVideoFinished(true)}
-
               onError={() => {
-
                 videoFailedRef.current = true;
-
                 setVideoFinished(true);
-
               }}
-
               className={`absolute inset-0 z-0 h-full w-full object-cover object-center transition-opacity duration-[1400ms] ease-in-out ${
-
-                videoFinished ? "pointer-events-none opacity-0" : "opacity-100"
-
+                videoFinished
+                  ? "pointer-events-none opacity-0"
+                  : "opacity-100"
               }`}
-
             >
-
               <source src="/images/promo1-.mp4" type="video/mp4" />
-
               Your browser does not support video playback.
-
             </video>
 
-
-
-            {/* Full-bleed photographs gently drift and crossfade after the video. */}
-
             {heroImageSlides.map((slide, index) => (
-
               <img
-
                 key={`${slide.image}-${index}`}
-
                 src={slide.image}
-
                 alt={slide.alt}
-
                 aria-hidden={!videoFinished || index !== activeImageIndex}
-
                 className={`soft-edit-hero-image absolute inset-0 z-0 h-full w-full object-cover object-center transition-[opacity,transform,filter] duration-[2200ms] ease-in-out ${
-
                   videoFinished && index === activeImageIndex
-
                     ? "scale-100 opacity-100"
-
                     : "pointer-events-none scale-[1.06] opacity-0"
-
                 }`}
-
                 style={{
-
                   filter: "saturate(0.91) contrast(1.02)",
-
                   animation:
-
                     videoFinished && index === activeImageIndex
-
                       ? "softEditHeroImageDrift 7s cubic-bezier(0.2, 0.65, 0.25, 1) both"
-
                       : "none",
-
                 }}
-
               />
-
             ))}
 
-
-
             <style>{`
-
               @keyframes softEditHeroImageDrift {
-
                 0% { transform: scale(1.055) translate3d(0.8%, 0.3%, 0); }
-
                 100% { transform: scale(1) translate3d(-0.4%, 0, 0); }
-
               }
 
               @media (prefers-reduced-motion: reduce) {
-
-                .soft-edit-hero-image { animation: none !important; transition-duration: 400ms !important; }
-
+                .soft-edit-hero-image {
+                  animation: none !important;
+                  transition-duration: 400ms !important;
+                }
               }
-
             `}</style>
 
-
-
-            {/* Restore the original cinematic overlay on the video; keep the stronger image-only shadow below. */}
-
             {!videoFinished ? (
-
               <>
-
                 <div
-
                   aria-hidden="true"
-
                   className="pointer-events-none absolute inset-0 z-[1]"
-
                   style={{
-
                     background:
-
                       "linear-gradient(90deg, rgba(28, 18, 29, 0.68) 0%, rgba(33, 22, 37, 0.54) 22%, rgba(48, 35, 47, 0.26) 46%, rgba(33, 22, 37, 0.08) 72%, rgba(33, 22, 37, 0.12) 100%)",
-
                   }}
-
                 />
-
                 <div
-
                   aria-hidden="true"
-
                   className="pointer-events-none absolute inset-0 z-[1]"
-
                   style={{
-
                     background:
-
                       "linear-gradient(0deg, rgba(33, 22, 37, 0.42) 0%, rgba(33, 22, 37, 0.08) 34%, rgba(33, 22, 37, 0.12) 100%)",
-
                   }}
-
                 />
-
               </>
-
             ) : (
-
               <>
-
-                {/* A cinematic plum-black shadow protects the copy on the left, while the images stay vivid on the right. */}
-
                 <div
-
                   aria-hidden="true"
-
                   className="pointer-events-none absolute inset-0 z-[1]"
-
                   style={{
-
                     background:
-
                       "linear-gradient(90deg, rgba(18, 12, 22, 0.88) 0%, rgba(24, 16, 28, 0.78) 18%, rgba(33, 22, 37, 0.58) 34%, rgba(33, 22, 37, 0.30) 49%, rgba(33, 22, 37, 0.08) 68%, rgba(33, 22, 37, 0.02) 100%)",
-
                   }}
-
                 />
-
                 <div
-
                   aria-hidden="true"
-
                   className="pointer-events-none absolute inset-0 z-[1]"
-
                   style={{
-
                     background:
-
                       "linear-gradient(0deg, rgba(25, 16, 28, 0.30) 0%, rgba(33, 22, 37, 0.05) 36%, rgba(33, 22, 37, 0.04) 100%)",
-
                   }}
-
                 />
-
               </>
-
             )}
-
           </>
-
         )}
 
-
-
         {/* STICKY LUXURY HEADER */}
-
-        {/* <header
-
-          className={`fixed inset-x-0 top-0 z-[100] w-full text-[#FFF9EF] transition-all duration-500 ${
-
-            isScrolled
-
-              ? "border-b border-[#D9BE8B]/40 bg-[#30232F]/95 shadow-[0_8px_30px_rgba(20,12,20,0.22)] backdrop-blur-xl"
-
-              : "border-b border-transparent bg-transparent"
-
-          }`}
-
-        > */}
-
         {createPortal(
-
-        <header
-
-
-
-className={`fixed inset-x-0 top-0 z-[9999] w-full border-x-0 border-t-0 border-b text-[#FFF9EF] shadow-none transition-[background-color,border-color,backdrop-filter] duration-500 ease-in-out ${
-
-  headerVariant === "home"
-
-    ? isScrolled
-
-      ? "border-b-[#D9BE8B]/40 bg-[#30232F]/[0.97] backdrop-blur-xl"
-
-      : "border-b-transparent bg-transparent backdrop-blur-none"
-
-    : "border-b-[#D9BE8B]/40 bg-[#30232F]/[0.97] backdrop-blur-xl"
-
-}`}
-
-
-
-  // className={`fixed inset-x-0 top-0 z-[9999] w-full border-x-0 border-t-0 border-b text-[#FFF9EF] shadow-none transition-[background-color,border-color] duration-500 ease-in-out ${
-
-  //   isScrolled
-
-  //     ? "border-b-[#D9BE8B]/40 bg-[#30232F]/[0.97] backdrop-blur-xl"
-
-  //     : "border-b-transparent bg-transparent backdrop-blur-none"
-
-
-
->
-
-          <nav
-
-            aria-label="Main navigation"
-
-            className="relative mx-auto flex min-h-[76px] w-full items-center justify-between gap-2 px-3 py-2.5 sm:min-h-[94px] sm:gap-3 sm:px-7 sm:py-4 lg:min-h-[108px] lg:px-10 2xl:px-14"
-
+          <header
+            className={`fixed inset-x-0 top-0 z-[9999] w-full border-x-0 border-t-0 border-b text-[#FFF9EF] shadow-none transition-[background-color,border-color,backdrop-filter] duration-500 ease-in-out ${
+              headerVariant === "home"
+                ? isScrolled
+                  ? "border-b-[#D9BE8B]/40 bg-[#30232F]/[0.97] backdrop-blur-xl"
+                  : "border-b-transparent bg-transparent backdrop-blur-none"
+                : "border-b-[#D9BE8B]/40 bg-[#30232F]/[0.97] backdrop-blur-xl"
+            }`}
           >
+            <nav
+              aria-label="Main navigation"
+              className="relative mx-auto flex min-h-[76px] w-full items-center justify-between gap-2 px-3 py-2.5 sm:min-h-[94px] sm:gap-3 sm:px-7 sm:py-4 lg:min-h-[108px] lg:px-10 2xl:px-14"
+            >
+              {/* DESKTOP LEFT NAVIGATION */}
+              <div className="hidden min-w-0 flex-1 items-center justify-start gap-4 lg:flex lg:gap-5">
+                <a
+                  href="/"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    closeNavigation();
+                    setActiveHref("/");
 
-            {/* LEFT NAVIGATION */}
-
-            <div className="hidden min-w-0 flex-1 items-center justify-start gap-4 lg:flex lg:gap-5">
-
-              {/* HOME: active only on the homepage */}
-
-              <a
-
-                href="/"
-
-                onClick={(event) => {
-
-                  event.preventDefault();
-
-                  closeNavigation();
-
-                  setActiveHref("/");
-
-                  if (headerVariant !== "home") {
-
-                    onNavigate("/");
-
-                  } else {
-
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-
-                  }
-
-                }}
-
-                aria-current={activeHref === "/" ? "page" : undefined}
-
-                className={`group/nav relative whitespace-nowrap py-3 text-[14px] font-semibold transition-colors duration-300 ${
-
-                  activeHref === "/"
-
-                    ? "text-[#E9CDA0]"
-
-                    : "text-[#FFF9EF] hover:text-[#E9CDA0]"
-
-                }`}
-
-              >
-
-                Home
-
-                <span
-
-                  className={`absolute inset-x-0 bottom-1 h-[1.5px] origin-left bg-[#D9BE8B] transition-transform duration-300 ${
-
+                    if (headerVariant !== "home") {
+                      onNavigate("/");
+                    } else {
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }
+                  }}
+                  aria-current={activeHref === "/" ? "page" : undefined}
+                  className={`group/nav relative whitespace-nowrap py-3 text-[14px] font-semibold transition-colors duration-300 ${
                     activeHref === "/"
-
-                      ? "scale-x-100"
-
-                      : "scale-x-0 group-hover/nav:scale-x-100"
-
+                      ? "text-[#E9CDA0]"
+                      : "text-[#FFF9EF] hover:text-[#E9CDA0]"
                   }`}
-
-                />
-
-              </a>
-
-
-
-              {heroNavigation.map((item) => {
-
-                const isActive = item.href === activeHref;
-
-
-
-                return (
-
-                  <button
-
-                    key={item.label}
-
-                    type="button"
-
-                    aria-current={isActive ? "page" : undefined}
-
-                    onClick={() => {
-
-                      closeNavigation();
-
-                      setActiveHref(item.href);
-
-                      onNavigate(item.href);
-
-                    }}
-
-                    className={`group/nav relative flex items-center whitespace-nowrap py-3 text-[14px] font-semibold transition-colors duration-300 ${
-
-                      isActive
-
-                        ? "text-[#E9CDA0]"
-
-                        : "text-[#FFF9EF] hover:text-[#E9CDA0]"
-
-                    }`}
-
-                  >
-
-                    {item.label}
-
-
-
-                    <span
-
-                      className={`absolute inset-x-0 bottom-1 h-[1.5px] origin-left bg-[#D9BE8B] transition-transform duration-300 ${
-
-                        isActive
-
-                          ? "scale-x-100"
-
-                          : "scale-x-0 group-hover/nav:scale-x-100"
-
-                      }`}
-
-                    />
-
-                  </button>
-
-                );
-
-              })}
-
-            </div>
-
-
-
-            {/* BRAND WORDMARK — LEAF BESIDE THE NAME */}
-
-            <a
-
-              href="/"
-
-              aria-label="The Soft Edit home"
-
-              onClick={(event) => {
-
-                event.preventDefault();
-
-                closeNavigation();
-
-                setActiveHref("/");
-
-                if (headerVariant !== "home") {
-
-                  onNavigate("/");
-
-                } else {
-
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-
-                }
-
-              }}
-
-              className="absolute left-[58px] top-1/2 z-10 flex -translate-y-1/2 items-center justify-center gap-2 whitespace-nowrap transition-opacity duration-300 hover:opacity-90 sm:left-1/2 sm:-translate-x-1/2 sm:gap-2.5 lg:left-1/2"
-
-            >
-
-              {/* BOTANICAL LEAF ICON */}
-
-              {/* <Leaf
-
-                size={23}
-
-                strokeWidth={1.4}
-
-                className="shrink-0 text-[#E9CDA0] transition-transform duration-500 hover:rotate-[-12deg] sm:h-[27px] sm:w-[27px]"
-
-              /> */}
-
-
-
-              {/* BRAND NAME */}
-
-              <img
-                src={logo}
-                alt="The Soft Edit"
-                // className="h-auto w-[168px] max-w-[46vw] object-contain sm:w-[205px] sm:max-w-none md:w-[245px] lg:w-[285px] xl:w-[310px]"
-                className="h-auto w-[195px] max-w-[52vw] object-contain sm:w-[205px] sm:max-w-none md:w-[245px] lg:w-[285px] xl:w-[310px]"
-                style={{
-                  mixBlendMode: "screen",
-                  filter: "brightness(1.65) saturate(1.12)",
-                  imageRendering: "auto",
-                }}
-              />
-
-            </a>
-
-
-
-            {/* MOBILE MENU: keeps the full navigation accessible on small screens */}
-            <button
-              type="button"
-              aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
-              aria-expanded={mobileMenuOpen}
-              onClick={() => setMobileMenuOpen((open) => !open)}
-              className="relative z-20 flex h-11 w-11 shrink-0 flex-col items-center justify-center gap-[5px] rounded-full text-[#FFF9EF] transition-colors hover:bg-white/10 hover:text-[#E9CDA0] sm:h-12 sm:w-12 lg:hidden"
-            >
-              {mobileMenuOpen ? (
-                <X size={26} strokeWidth={1.8} />
-              ) : (
-                <>
-                  <span className="h-[2px] w-6 rounded-full bg-current" />
-                  <span className="h-[2px] w-6 rounded-full bg-current" />
-                  <span className="h-[2px] w-6 rounded-full bg-current" />
-                </>
-              )}
-            </button>
-
-            {/* RIGHT CONTROLS: LOGIN, SEARCH, CART */}
-
-            <div className="ml-auto flex min-w-0 items-center justify-end gap-2 sm:gap-4 lg:gap-5">
-
-              {/* LOGIN / REGISTER */}
-
-              <div
-                className="hidden shrink-0 items-center gap-0 whitespace-nowrap text-[12px] font-semibold sm:flex sm:text-[15px]"
-              >
-
-                <a
-
-                  href="/login"
-
-                  className="group/account relative py-2 text-[#FFF9EF] transition-colors duration-300 hover:text-[#E9CDA0]"
-
                 >
-
-                  Login
-
-                  <span className="absolute inset-x-0 bottom-0 h-[1.5px] origin-left scale-x-0 bg-[#D9BE8B] transition-transform duration-300 group-hover/account:scale-x-100" />
-
+                  Home
+                  <span
+                    className={`absolute inset-x-0 bottom-1 h-[1.5px] origin-left bg-[#D9BE8B] transition-transform duration-300 ${
+                      activeHref === "/"
+                        ? "scale-x-100"
+                        : "scale-x-0 group-hover/nav:scale-x-100"
+                    }`}
+                  />
                 </a>
 
+                {heroNavigation.map((item) => {
+                  const isActive = item.href === activeHref;
 
-
-                <span className="px-1.5 text-[#D9BE8B]/80">/</span>
-
-
-
-                <a
-
-                  href="/register"
-
-                  className="group/account relative py-2 text-[#FFF9EF] transition-colors duration-300 hover:text-[#E9CDA0]"
-
-                >
-
-                  Register
-
-                  <span className="absolute inset-x-0 bottom-0 h-[1.5px] origin-left scale-x-0 bg-[#D9BE8B] transition-transform duration-300 group-hover/account:scale-x-100" />
-
-                </a>
-
-              </div>
-
-
-
-              {/* COLLAPSIBLE SEARCH */}
-
-              <div
-
-                ref={searchContainerRef}
-
-                className="relative flex shrink-0 items-center justify-end"
-
-              >
-
-                <form
-
-                  role="search"
-
-                  onSubmit={handleSearch}
-
-                  className={`relative flex items-center transition-all duration-300 ease-in-out ${
-
-                    searchOpen
-
-                      ? "w-[135px] sm:w-[185px] lg:w-[205px]"
-
-                      : "w-9"
-
-                  }`}
-
-                >
-
-                  <div
-
-                    className={`flex h-11 w-full items-center overflow-hidden rounded-full border transition-all duration-300 sm:h-11 ${
-
-                      searchOpen
-
-                        ? "border-[#D9BE8B] bg-[#30232F]/80 pl-3 pr-2 shadow-[0_0_0_3px_rgba(217,190,139,0.10)]"
-
-                        : "justify-end border-transparent bg-transparent"
-
-                    }`}
-
-                  >
-
-                    {searchOpen && (
-
-                      <input
-
-                        ref={searchRef}
-
-                        type="search"
-
-                        value={searchQuery}
-
-                        onChange={(event) =>
-
-                          setSearchQuery(event.target.value)
-
-                        }
-
-                        onFocus={() => setSearchFocused(true)}
-
-                        onBlur={() => {
-
-                          window.setTimeout(() => {
-
-                            setSearchFocused(false);
-
-                          }, 180);
-
-                        }}
-
-                        placeholder="Search products..."
-
-                        aria-label="Search products"
-
-                        aria-expanded={
-
-                          searchFocused && searchResults.length > 0
-
-                        }
-
-                        className="h-full min-w-0 flex-1 border-0 bg-transparent p-0 text-[12px] text-[#FFF9EF] outline-none ring-0 placeholder:text-[#FFF9EF]/65 focus:border-0 focus:outline-none focus:ring-0 sm:text-[13px]"
-
-                      />
-
-                    )}
-
-
-
-                    {searchOpen && searchQuery && (
-
-                      <button
-
-                        type="button"
-
-                        aria-label="Clear search"
-
-                        onMouseDown={(event) => event.preventDefault()}
-
-                        onClick={() => {
-
-                          setSearchQuery("");
-
-                          searchRef.current?.focus();
-
-                        }}
-
-                        className="ml-1 shrink-0 text-[#AAA39D] transition-colors hover:text-[#E9CDA0]"
-
-                      >
-
-                        <X size={14} />
-
-                      </button>
-
-                    )}
-
-
-
-                    <button
-
-                      type={searchOpen ? "submit" : "button"}
-
-                      aria-label={
-
-                        searchOpen ? "Submit product search" : "Open search"
-
-                      }
-
-                      onClick={() => {
-
-                        if (!searchOpen) {
-
-                          setSearchOpen(true);
-
-                          window.setTimeout(() => {
-
-                            searchRef.current?.focus();
-
-                          }, 180);
-
-                        }
-
-                      }}
-
-                      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-colors duration-300 ${
-
-                        searchOpen
-
-                          ? "text-[#E9CDA0] hover:text-[#FFF9EF]"
-
-                          : "text-[#E9CDA0] hover:bg-white/10 hover:text-[#FFF9EF]"
-
-                      }`}
-
-                    >
-
-                      <Search size={22} strokeWidth={1.8} />
-
-                    </button>
-
-                  </div>
-
-
-
-                  {/* SEARCH SUGGESTIONS */}
-
-                  {searchOpen &&
-
-                    searchFocused &&
-
-                    searchResults.length > 0 && (
-
-                      <div className="absolute right-0 top-full z-[110] mt-3 w-[min(320px,calc(100vw-24px))] overflow-hidden rounded-xl border border-[#D9BE8B]/40 bg-[#30232F]/[0.98] p-2 shadow-[0_20px_55px_rgba(20,12,20,0.38)] backdrop-blur-xl">
-
-                        <p className="px-3 pb-2 pt-3 text-[10px] tracking-[0.18em] text-[#D9BE8B]">
-
-                          DISCOVER YOUR NEXT FAVOURITE
-
-                        </p>
-
-
-
-                        {searchResults.map((product) => (
-
-                          <button
-
-                            key={product.id}
-
-                            type="button"
-
-                            onMouseDown={(event) => event.preventDefault()}
-
-                            onClick={() => openProduct(product.id)}
-
-                            className="flex w-full items-center justify-between gap-3 rounded-lg px-3 py-3 text-left text-[13px] text-[#FFF9EF] transition-colors duration-200 hover:bg-white/[0.08] hover:text-[#E9CDA0]"
-
-                          >
-
-                            <span className="min-w-0 truncate">
-
-                              {product.name}
-
-                            </span>
-
-
-
-                            <ArrowUpRight
-
-                              size={15}
-
-                              className="shrink-0 text-[#D9BE8B]"
-
-                            />
-
-                          </button>
-
-                        ))}
-
-                      </div>
-
-                    )}
-
-
-
-                  {searchOpen &&
-
-                    searchFocused &&
-
-                    searchQuery.trim().length > 0 &&
-
-                    searchResults.length === 0 && (
-
-                      <div className="absolute right-0 top-full z-[110] mt-3 w-[min(320px,calc(100vw-24px))] rounded-xl border border-[#D9BE8B]/40 bg-[#30232F]/[0.98] p-5 shadow-xl backdrop-blur-xl">
-
-                        <p className="text-[13px] leading-6 text-[#FFF9EF]">
-
-                          We couldn't find a match. Try another product name
-
-                          or category.
-
-                        </p>
-
-                      </div>
-
-                    )}
-
-                </form>
-
-              </div>
-
-
-
-              {/* CART */}
-
-              <button
-
-                type="button"
-
-                onClick={onOpenBag}
-
-                aria-label={`Open cart, ${bagCount} items`}
-
-                title="Cart"
-
-                className="group/cart relative flex h-11 w-10 shrink-0 items-center justify-center text-[#FFF9EF] transition-colors duration-300 hover:text-[#E9CDA0] sm:h-11 sm:w-11"
-
-              >
-
-                <ShoppingCart
-
-                  size={25}
-
-                  strokeWidth={1.7}
-
-                  className="transition-transform duration-300 group-hover/cart:-translate-y-0.5"
-
-                />
-
-
-
-                {bagCount > 0 && (
-
-                  <span className="absolute right-0 top-0 flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-[#E9CDA0] px-1 text-[10px] font-semibold text-[#30232F]">
-
-                    {bagCount}
-
-                  </span>
-
-                )}
-
-              </button>
-            </div>
-
-            {/* MOBILE NAVIGATION DRAWER */}
-            {mobileMenuOpen && (
-              <div className="absolute inset-x-3 top-[calc(100%-2px)] z-[10000] overflow-hidden rounded-2xl border border-[#D9BE8B]/35 bg-[#30232F]/[0.99] p-3 shadow-[0_22px_60px_rgba(15,8,15,0.45)] backdrop-blur-2xl lg:hidden">
-                <p className="px-3 pb-2 pt-2 text-[11px] font-semibold tracking-[0.2em] text-[#D9BE8B]">
-                  EXPLORE THE SOFT EDIT
-                </p>
-                <div className="flex flex-col">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      closeNavigation();
-                      setActiveHref("/");
-                      setMobileMenuOpen(false);
-                      if (headerVariant !== "home") onNavigate("/");
-                      else window.scrollTo({ top: 0, behavior: "smooth" });
-                    }}
-                    className={`flex min-h-12 items-center justify-between rounded-xl px-3 text-left text-[16px] font-medium transition-colors hover:bg-white/[0.07] ${activeHref === "/" ? "text-[#E9CDA0]" : "text-[#FFF9EF]"}`}
-                  >
-                    Home <ArrowUpRight size={17} />
-                  </button>
-                  {heroNavigation.map((item) => (
+                  return (
                     <button
                       key={item.label}
                       type="button"
-                      aria-current={activeHref === item.href ? "page" : undefined}
+                      aria-current={isActive ? "page" : undefined}
                       onClick={() => {
                         closeNavigation();
                         setActiveHref(item.href);
-                        setMobileMenuOpen(false);
                         onNavigate(item.href);
                       }}
-                      className={`flex min-h-12 items-center justify-between rounded-xl px-3 text-left text-[16px] font-medium transition-colors hover:bg-white/[0.07] ${activeHref === item.href ? "text-[#E9CDA0]" : "text-[#FFF9EF]"}`}
+                      className={`group/nav relative flex items-center whitespace-nowrap py-3 text-[14px] font-semibold transition-colors duration-300 ${
+                        isActive
+                          ? "text-[#E9CDA0]"
+                          : "text-[#FFF9EF] hover:text-[#E9CDA0]"
+                      }`}
                     >
-                      {item.label} <ArrowUpRight size={17} />
+                      {item.label}
+                      <span
+                        className={`absolute inset-x-0 bottom-1 h-[1.5px] origin-left bg-[#D9BE8B] transition-transform duration-300 ${
+                          isActive
+                            ? "scale-x-100"
+                            : "scale-x-0 group-hover/nav:scale-x-100"
+                        }`}
+                      />
                     </button>
-                  ))}
+                  );
+                })}
+              </div>
+
+              {/* BRAND LOGO */}
+              <a
+                href="/"
+                aria-label="The Soft Edit home"
+                onClick={(event) => {
+                  event.preventDefault();
+                  closeNavigation();
+                  setActiveHref("/");
+
+                  if (headerVariant !== "home") {
+                    onNavigate("/");
+                  } else {
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }
+                }}
+                className="absolute left-[58px] top-1/2 z-10 flex -translate-y-1/2 items-center justify-center gap-2 whitespace-nowrap transition-opacity duration-300 hover:opacity-90 sm:left-1/2 sm:-translate-x-1/2 sm:gap-2.5 lg:left-1/2"
+              >
+                <img
+                  src={logo}
+                  alt="The Soft Edit"
+                  className="h-auto w-[195px] max-w-[52vw] object-contain sm:w-[205px] sm:max-w-none md:w-[245px] lg:w-[285px] xl:w-[310px]"
+                  style={{
+                    mixBlendMode: "screen",
+                    filter: "brightness(1.65) saturate(1.12)",
+                    imageRendering: "auto",
+                  }}
+                />
+              </a>
+
+              {/* MOBILE MENU BUTTON */}
+              <button
+                type="button"
+                aria-label={
+                  mobileMenuOpen
+                    ? "Close navigation menu"
+                    : "Open navigation menu"
+                }
+                aria-expanded={mobileMenuOpen}
+                onClick={() => setMobileMenuOpen((open) => !open)}
+                className="relative z-20 flex h-11 w-11 shrink-0 flex-col items-center justify-center gap-[5px] rounded-full text-[#FFF9EF] transition-colors hover:bg-white/10 hover:text-[#E9CDA0] sm:h-12 sm:w-12 lg:hidden"
+              >
+                {mobileMenuOpen ? (
+                  <X size={26} strokeWidth={1.8} />
+                ) : (
+                  <>
+                    <span className="h-[2px] w-6 rounded-full bg-current" />
+                    <span className="h-[2px] w-6 rounded-full bg-current" />
+                    <span className="h-[2px] w-6 rounded-full bg-current" />
+                  </>
+                )}
+              </button>
+
+              {/* RIGHT CONTROLS */}
+              <div className="ml-auto flex min-w-0 items-center justify-end gap-2 sm:gap-4 lg:gap-5">
+                {/* LOGIN / REGISTER — DESKTOP */}
+                <div className="hidden shrink-0 items-center gap-0 whitespace-nowrap text-[12px] font-semibold sm:flex sm:text-[15px]">
+                  <a
+                    href="/login"
+                    className="group/account relative py-2 text-[#FFF9EF] transition-colors duration-300 hover:text-[#E9CDA0]"
+                  >
+                    Login
+                    <span className="absolute inset-x-0 bottom-0 h-[1.5px] origin-left scale-x-0 bg-[#D9BE8B] transition-transform duration-300 group-hover/account:scale-x-100" />
+                  </a>
+
+                  <span className="px-1.5 text-[#D9BE8B]/80">/</span>
+
+                  <a
+                    href="/register"
+                    className="group/account relative py-2 text-[#FFF9EF] transition-colors duration-300 hover:text-[#E9CDA0]"
+                  >
+                    Register
+                    <span className="absolute inset-x-0 bottom-0 h-[1.5px] origin-left scale-x-0 bg-[#D9BE8B] transition-transform duration-300 group-hover/account:scale-x-100" />
+                  </a>
                 </div>
-                <div className="mt-2 grid grid-cols-2 gap-2 border-t border-[#D9BE8B]/20 pt-3">
-                  <a href="/login" onClick={() => setMobileMenuOpen(false)} className="flex min-h-11 items-center justify-center rounded-xl border border-[#D9BE8B]/55 px-3 text-[14px] font-semibold text-[#FFF9EF] transition-colors hover:bg-[#D9BE8B]/10 hover:text-[#E9CDA0]">Login</a>
-                  <a href="/register" onClick={() => setMobileMenuOpen(false)} className="flex min-h-11 items-center justify-center rounded-xl bg-[#F7F2EA] px-3 text-[14px] font-semibold text-[#30232F] transition-colors hover:bg-[#D9BE8B]">Register</a>
+
+                {/* MOBILE SEARCH TOGGLE */}
+                <button
+                  type="button"
+                  aria-label={mobileSearchOpen ? "Close search" : "Open search"}
+                  aria-expanded={mobileSearchOpen}
+                  onClick={() => {
+                    setMobileSearchOpen((open) => !open);
+                    setSearchFocused(false);
+
+                    if (!mobileSearchOpen) {
+                      window.setTimeout(() => {
+                        mobileSearchRef.current?.focus();
+                      }, 180);
+                    }
+                  }}
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-[#E9CDA0] transition-colors duration-300 hover:bg-white/10 hover:text-[#FFF9EF] sm:hidden"
+                >
+                  {mobileSearchOpen ? (
+                    <X size={22} strokeWidth={1.8} />
+                  ) : (
+                    <Search size={22} strokeWidth={1.8} />
+                  )}
+                </button>
+
+                {/* EXISTING DESKTOP COLLAPSIBLE SEARCH */}
+                <div
+                  ref={searchContainerRef}
+                  className="relative hidden shrink-0 items-center justify-end sm:flex"
+                >
+                  <form
+                    role="search"
+                    onSubmit={handleSearch}
+                    className={`relative flex items-center transition-all duration-300 ease-in-out ${
+                      searchOpen ? "w-[135px] sm:w-[185px] lg:w-[205px]" : "w-9"
+                    }`}
+                  >
+                    <div
+                      className={`flex h-11 w-full items-center overflow-hidden rounded-full border transition-all duration-300 ${
+                        searchOpen
+                          ? "border-[#D9BE8B] bg-[#30232F]/80 pl-3 pr-2 shadow-[0_0_0_3px_rgba(217,190,139,0.10)]"
+                          : "justify-end border-transparent bg-transparent"
+                      }`}
+                    >
+                      {searchOpen && (
+                        <input
+                          ref={searchRef}
+                          type="search"
+                          value={searchQuery}
+                          onChange={(event) => setSearchQuery(event.target.value)}
+                          onFocus={() => setSearchFocused(true)}
+                          onBlur={() => {
+                            window.setTimeout(() => setSearchFocused(false), 180);
+                          }}
+                          placeholder="Search products..."
+                          aria-label="Search products"
+                          aria-expanded={searchFocused && searchResults.length > 0}
+                          className="h-full min-w-0 flex-1 border-0 bg-transparent p-0 text-[12px] text-[#FFF9EF] outline-none ring-0 placeholder:text-[#FFF9EF]/65 focus:border-0 focus:outline-none focus:ring-0 sm:text-[13px]"
+                        />
+                      )}
+
+                      {searchOpen && searchQuery && (
+                        <button
+                          type="button"
+                          aria-label="Clear search"
+                          onMouseDown={(event) => event.preventDefault()}
+                          onClick={() => {
+                            setSearchQuery("");
+                            searchRef.current?.focus();
+                          }}
+                          className="ml-1 shrink-0 text-[#AAA39D] transition-colors hover:text-[#E9CDA0]"
+                        >
+                          <X size={14} />
+                        </button>
+                      )}
+
+                      <button
+                        type={searchOpen ? "submit" : "button"}
+                        aria-label={searchOpen ? "Submit product search" : "Open search"}
+                        onClick={() => {
+                          if (!searchOpen) {
+                            setSearchOpen(true);
+                            window.setTimeout(() => searchRef.current?.focus(), 180);
+                          }
+                        }}
+                        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-colors duration-300 ${
+                          searchOpen
+                            ? "text-[#E9CDA0] hover:text-[#FFF9EF]"
+                            : "text-[#E9CDA0] hover:bg-white/10 hover:text-[#FFF9EF]"
+                        }`}
+                      >
+                        <Search size={22} strokeWidth={1.8} />
+                      </button>
+                    </div>
+
+                    {searchOpen && searchFocused && searchResults.length > 0 && (
+                      <div className="absolute right-0 top-full z-[110] mt-3 w-[min(320px,calc(100vw-24px))] overflow-hidden rounded-xl border border-[#D9BE8B]/40 bg-[#30232F]/[0.98] p-2 shadow-[0_20px_55px_rgba(20,12,20,0.38)] backdrop-blur-xl">
+                        <p className="px-3 pb-2 pt-3 text-[10px] tracking-[0.18em] text-[#D9BE8B]">
+                          DISCOVER YOUR NEXT FAVOURITE
+                        </p>
+
+                        {searchResults.map((product) => (
+                          <button
+                            key={product.id}
+                            type="button"
+                            onMouseDown={(event) => event.preventDefault()}
+                            onClick={() => openProduct(product.id)}
+                            className="flex w-full items-center justify-between gap-3 rounded-lg px-3 py-3 text-left text-[13px] text-[#FFF9EF] transition-colors duration-200 hover:bg-white/[0.08] hover:text-[#E9CDA0]"
+                          >
+                            <span className="min-w-0 truncate">{product.name}</span>
+                            <ArrowUpRight size={15} className="shrink-0 text-[#D9BE8B]" />
+                          </button>
+                        ))}
+                      </div>
+                    )}
+
+                    {searchOpen &&
+                      searchFocused &&
+                      searchQuery.trim().length > 0 &&
+                      searchResults.length === 0 && (
+                        <div className="absolute right-0 top-full z-[110] mt-3 w-[min(320px,calc(100vw-24px))] rounded-xl border border-[#D9BE8B]/40 bg-[#30232F]/[0.98] p-5 shadow-xl backdrop-blur-xl">
+                          <p className="text-[13px] leading-6 text-[#FFF9EF]">
+                            We couldn't find a match. Try another product name or category.
+                          </p>
+                        </div>
+                      )}
+                  </form>
                 </div>
+
+                {/* CART */}
+                <button
+                  type="button"
+                  onClick={onOpenBag}
+                  aria-label={`Open cart, ${bagCount} items`}
+                  title="Cart"
+                  className="group/cart relative flex h-11 w-10 shrink-0 items-center justify-center text-[#FFF9EF] transition-colors duration-300 hover:text-[#E9CDA0] sm:h-11 sm:w-11"
+                >
+                  <ShoppingCart
+                    size={25}
+                    strokeWidth={1.7}
+                    className="transition-transform duration-300 group-hover/cart:-translate-y-0.5"
+                  />
+
+                  {bagCount > 0 && (
+                    <span className="absolute right-0 top-0 flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-[#E9CDA0] px-1 text-[10px] font-semibold text-[#30232F]">
+                      {bagCount}
+                    </span>
+                  )}
+                </button>
+              </div>
+
+              {/* MOBILE NAVIGATION DRAWER */}
+              {mobileMenuOpen && (
+                <div className="absolute inset-x-3 top-[calc(100%-2px)] z-[10000] overflow-hidden rounded-2xl border border-[#D9BE8B]/35 bg-[#30232F]/[0.99] p-3 shadow-[0_22px_60px_rgba(15,8,15,0.45)] backdrop-blur-2xl lg:hidden">
+                  <p className="px-3 pb-2 pt-2 text-[11px] font-semibold tracking-[0.2em] text-[#D9BE8B]">
+                    EXPLORE THE SOFT EDIT
+                  </p>
+
+                  <div className="flex flex-col">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        closeNavigation();
+                        setActiveHref("/");
+                        setMobileMenuOpen(false);
+
+                        if (headerVariant !== "home") onNavigate("/");
+                        else window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
+                      className={`flex min-h-12 items-center justify-between rounded-xl px-3 text-left text-[16px] font-medium transition-colors hover:bg-white/[0.07] ${
+                        activeHref === "/" ? "text-[#E9CDA0]" : "text-[#FFF9EF]"
+                      }`}
+                    >
+                      Home <ArrowUpRight size={17} />
+                    </button>
+
+                    {heroNavigation.map((item) => (
+                      <button
+                        key={item.label}
+                        type="button"
+                        aria-current={activeHref === item.href ? "page" : undefined}
+                        onClick={() => {
+                          closeNavigation();
+                          setActiveHref(item.href);
+                          setMobileMenuOpen(false);
+                          onNavigate(item.href);
+                        }}
+                        className={`flex min-h-12 items-center justify-between rounded-xl px-3 text-left text-[16px] font-medium transition-colors hover:bg-white/[0.07] ${
+                          activeHref === item.href ? "text-[#E9CDA0]" : "text-[#FFF9EF]"
+                        }`}
+                      >
+                        {item.label} <ArrowUpRight size={17} />
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="mt-2 grid grid-cols-2 gap-2 border-t border-[#D9BE8B]/20 pt-3">
+                    <a
+                      href="/login"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex min-h-11 items-center justify-center rounded-xl border border-[#D9BE8B]/55 px-3 text-[14px] font-semibold text-[#FFF9EF] transition-colors hover:bg-[#D9BE8B]/10 hover:text-[#E9CDA0]"
+                    >
+                      Login
+                    </a>
+                    <a
+                      href="/register"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex min-h-11 items-center justify-center rounded-xl bg-[#F7F2EA] px-3 text-[14px] font-semibold text-[#30232F] transition-colors hover:bg-[#D9BE8B]"
+                    >
+                      Register
+                    </a>
+                  </div>
+                </div>
+              )}
+            </nav>
+
+            {/* MOBILE FULL-WIDTH SEARCH ROW — BELOW THE NAVBAR */}
+            {mobileSearchOpen && (
+              <div
+                ref={mobileSearchContainerRef}
+                className="relative z-[10001] w-full border-t border-[#D9BE8B]/25 bg-[#30232F]/[0.99] px-4 pb-4 pt-3 shadow-[0_18px_35px_rgba(15,8,15,0.28)] backdrop-blur-xl sm:hidden"
+              >
+                <form
+                  role="search"
+                  onSubmit={handleSearch}
+                  className="relative w-full"
+                >
+                  <div className="flex h-12 w-full items-center gap-3 rounded-xl border border-[#D9BE8B]/60 bg-white/[0.05] px-4 transition-colors duration-300 focus-within:border-[#E9CDA0] focus-within:bg-white/[0.08]">
+                    <Search
+                      size={19}
+                      strokeWidth={1.8}
+                      className="shrink-0 text-[#E9CDA0]"
+                    />
+
+                    <input
+                      ref={mobileSearchRef}
+                      type="search"
+                      value={searchQuery}
+                      onChange={(event) => setSearchQuery(event.target.value)}
+                      onFocus={() => setSearchFocused(true)}
+                      placeholder="Discover your next skin ritual..."
+                      aria-label="Search products"
+                      aria-expanded={searchFocused && searchResults.length > 0}
+                      className="h-full min-w-0 flex-1 border-0 bg-transparent p-0 text-[14px] text-[#FFF9EF] outline-none ring-0 placeholder:text-[#FFF9EF]/55 focus:border-0 focus:outline-none focus:ring-0"
+                    />
+
+                    {searchQuery && (
+                      <button
+                        type="button"
+                        aria-label="Clear search"
+                        onClick={() => {
+                          setSearchQuery("");
+                          mobileSearchRef.current?.focus();
+                        }}
+                        className="shrink-0 text-[#AAA39D] transition-colors hover:text-[#E9CDA0]"
+                      >
+                        <X size={17} />
+                      </button>
+                    )}
+                  </div>
+
+                  {/* MOBILE PRODUCT SUGGESTIONS */}
+                  {searchFocused && searchResults.length > 0 && (
+                    <div className="absolute inset-x-0 top-full z-[10010] mt-2 overflow-hidden rounded-xl border border-[#D9BE8B]/40 bg-[#30232F] p-2 shadow-[0_20px_55px_rgba(20,12,20,0.38)]">
+                      <p className="px-3 pb-2 pt-3 text-[10px] tracking-[0.18em] text-[#D9BE8B]">
+                        DISCOVER YOUR NEXT FAVOURITE
+                      </p>
+
+                      {searchResults.map((product) => (
+                        <button
+                          key={product.id}
+                          type="button"
+                          onClick={() => openProduct(product.id)}
+                          className="flex min-h-11 w-full items-center justify-between gap-3 rounded-lg px-3 py-3 text-left text-[13px] text-[#FFF9EF] transition-colors duration-200 hover:bg-white/[0.08] hover:text-[#E9CDA0]"
+                        >
+                          <span className="min-w-0 truncate">{product.name}</span>
+                          <ArrowUpRight size={15} className="shrink-0 text-[#D9BE8B]" />
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* NO MATCH FOUND */}
+                  {searchFocused &&
+                    searchQuery.trim().length > 0 &&
+                    searchResults.length === 0 && (
+                      <div className="absolute inset-x-0 top-full z-[10010] mt-2 rounded-xl border border-[#D9BE8B]/40 bg-[#30232F] p-4 shadow-xl">
+                        <p className="text-[13px] leading-6 text-[#FFF9EF]">
+                          We couldn't find a match. Try another product name or category.
+                        </p>
+                      </div>
+                    )}
+                </form>
               </div>
             )}
-
-          </nav>
-
-        </header>,
-
-        document.body,
-
+          </header>,
+          document.body,
         )}
 
-
-
         {/* HERO COPY */}
-
         {showHeroBanner && (
+          <div className="hero-copy relative z-20 flex min-h-[650px] w-full max-w-none flex-col items-center justify-center px-5 pb-28 pt-32 text-center text-white sm:min-h-[720px] sm:items-start sm:px-8 sm:pb-28 sm:pt-40 sm:text-left lg:min-h-[800px] lg:w-[55%] lg:px-12 lg:pt-44 xl:px-16">
+            <div className="hero-copy-item mb-5 flex items-center justify-center gap-3 sm:mb-7 sm:justify-start">
+              <span className="hero-gold-line h-px w-9 bg-[#B99A62]" />
+              <p className="text-[10px] font-medium tracking-[0.12em] text-[#E4C99B] sm:text-xs sm:tracking-[0.23em]">
+                {currentSlide.eyebrow}
+              </p>
+            </div>
 
-        <div className="hero-copy relative z-20 flex min-h-[650px] w-full max-w-none flex-col items-center justify-center px-5 pb-28 pt-32 text-center text-white sm:min-h-[720px] sm:items-start sm:px-8 sm:pb-28 sm:pt-40 sm:text-left lg:min-h-[800px] lg:w-[55%] lg:px-12 lg:pt-44 xl:px-16">
+            <h1
+              className="hero-copy-item hero-headline mx-auto max-w-[390px] font-serif text-[43px] font-normal leading-[1.08] tracking-[-0.045em] sm:mx-0 sm:max-w-full sm:text-4xl sm:leading-[1.08] lg:text-6xl xl:text-[76px]"
+              style={{ animationDelay: "120ms" }}
+            >
+              {currentSlide.title.map((line, index) => (
+                <span
+                  key={`${line}-${index}`}
+                  className={`hero-title-line block ${
+                    index === 1 ? "italic text-[#DCC09A]" : "text-[#FBF6EF]"
+                  }`}
+                  style={{ animationDelay: `${180 + index * 140}ms` }}
+                >
+                  {line}
+                </span>
+              ))}
+            </h1>
 
-          <div className="hero-copy-item mb-5 flex items-center justify-center gap-3 sm:mb-7 sm:justify-start">
-
-            <span className="hero-gold-line h-px w-9 bg-[#B99A62]" />
-
-
-
-            <p className="text-[10px] font-medium tracking-[0.12em] text-[#E4C99B] sm:text-xs sm:tracking-[0.23em]">
-
-              {currentSlide.eyebrow}
-
+            <p
+              className="hero-copy-item mt-5 max-w-[350px] text-[15px] leading-7 text-white/90 sm:mt-6 sm:max-w-[340px] sm:text-sm sm:leading-7 lg:text-base"
+              style={{ animationDelay: "430ms" }}
+            >
+              {currentSlide.description}
             </p>
 
-          </div>
-
-
-
-          <h1
-
-            className="hero-copy-item hero-headline mx-auto max-w-[390px] font-serif text-[43px] font-normal leading-[1.08] tracking-[-0.045em] sm:mx-0 sm:max-w-full sm:text-4xl sm:leading-[1.08] lg:text-6xl xl:text-[76px]"
-
-            style={{ animationDelay: "120ms" }}
-
-          >
-
-            {currentSlide.title.map((line, index) => (
-
-              <span
-
-                key={`${line}-${index}`}
-
-                className={`hero-title-line block ${
-
-                  index === 1
-
-                    ? "italic text-[#DCC09A]"
-
-                    : "text-[#FBF6EF]"
-
-                }`}
-
-                style={{ animationDelay: `${180 + index * 140}ms` }}
-
-              >
-
-                {line}
-
+            <a
+              href="#shop"
+              className="hero-copy-item hero-cta group/cta mb-5 mt-7 inline-flex items-center justify-center gap-5 border border-[#F7F2EA] bg-[#F7F2EA] px-5 py-4 text-[10px] font-semibold tracking-[0.12em] text-[#30232F] transition-all duration-500 hover:-translate-y-1 hover:border-[#B99A62] hover:bg-[#B99A62] hover:text-[#211820] sm:mt-9 sm:gap-8 sm:px-7 sm:text-xs sm:tracking-[0.16em]"
+              style={{ animationDelay: "520ms" }}
+            >
+              <span className="text-[#30232F] transition-colors duration-500 group-hover/cta:text-[#211820]">
+                {currentSlide.button}
               </span>
+              <ArrowUpRight
+                size={17}
+                className="shrink-0 text-[#30232F] transition-all duration-500 group-hover/cta:translate-x-1 group-hover/cta:-translate-y-1 group-hover/cta:text-[#211820]"
+              />
+            </a>
 
-            ))}
+            <a
+              href="#categories"
+              className="hero-copy-item absolute bottom-5 left-4 flex items-center gap-2 text-[9px] tracking-[0.08em] text-white/90 transition-colors duration-300 hover:text-[#B99A62] sm:bottom-8 sm:left-12 sm:gap-3 sm:text-[9px] sm:tracking-[0.14em] lg:left-20"
+              style={{ animationDelay: "650ms" }}
+            >
+              <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/50 transition-all duration-500 hover:border-[#B99A62] hover:bg-[#B99A62]/15">
+                <ArrowDown size={15} />
+              </span>
+              A MOMENT FOR YOURSELF
+            </a>
 
-          </h1>
-
-
-
-          <p
-
-            className="hero-copy-item mt-5 max-w-[350px] text-[15px] leading-7 text-white/90 sm:mt-6 sm:max-w-[340px] sm:text-sm sm:leading-7 lg:text-base"
-
-            style={{ animationDelay: "430ms" }}
-
-          >
-
-            {currentSlide.description}
-
-          </p>
-
-
-
-          <a
-
-            href="#shop"
-
-            className="hero-copy-item hero-cta group/cta mb-5 mt-7 inline-flex items-center justify-center gap-5 border border-[#F7F2EA] bg-[#F7F2EA] px-5 py-4 text-[10px] font-semibold tracking-[0.12em] text-[#30232F] transition-all duration-500 hover:-translate-y-1 hover:border-[#B99A62] hover:bg-[#B99A62] hover:text-[#211820] sm:mt-9 sm:gap-8 sm:px-7 sm:text-xs sm:tracking-[0.16em]"
-
-            style={{ animationDelay: "520ms" }}
-
-          >
-
-            <span className="text-[#30232F] transition-colors duration-500 group-hover/cta:text-[#211820]">
-
-              {currentSlide.button}
-
-            </span>
-
-
-
-            <ArrowUpRight
-
-              size={17}
-
-              className="shrink-0 text-[#30232F] transition-all duration-500 group-hover/cta:translate-x-1 group-hover/cta:-translate-y-1 group-hover/cta:text-[#211820]"
-
-            />
-
-          </a>
-
-
-
-          <a
-
-            href="#categories"
-
-            className="hero-copy-item absolute bottom-5 left-4 flex items-center gap-2 text-[9px] tracking-[0.08em] text-white/90 transition-colors duration-300 hover:text-[#B99A62] sm:bottom-8 sm:left-12 sm:gap-3 sm:text-[9px] sm:tracking-[0.14em] lg:left-20"
-
-            style={{ animationDelay: "650ms" }}
-
-          >
-
-            <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/50 transition-all duration-500 hover:border-[#B99A62] hover:bg-[#B99A62]/15">
-
-              <ArrowDown size={15} />
-
-            </span>
-
-
-
-            A MOMENT FOR YOURSELF
-
-          </a>
-
-
-
-          {/* EXISTING SIGNATURE */}
-
-          <div className="mt-2 text-center sm:mt-0 sm:text-left" style={{ animationDelay: "700ms" }}>
-
-            <p className="font-serif text-lg italic sm:text-2xl">
-
-              {currentSlide.signature}
-
-            </p>
-
-
-
-            <p className="mt-1 text-[13px] tracking-[0.2em] sm:mt-2 sm:text-[22px]">
-
-              THE SOFT EDIT
-
-            </p>
-
+            <div
+              className="mt-2 text-center sm:mt-0 sm:text-left"
+              style={{ animationDelay: "700ms" }}
+            >
+              <p className="font-serif text-lg italic sm:text-2xl">
+                {currentSlide.signature}
+              </p>
+              <p className="mt-1 text-[13px] tracking-[0.2em] sm:mt-2 sm:text-[22px]">
+                THE SOFT EDIT
+              </p>
+            </div>
           </div>
-
-        </div>
-
-         )}
-
+        )}
       </div>
-
     </section>
-
   );
-
 }
+
+
+
+// function Hero({
+//   bagCount,
+//   onOpenBag,
+//   onNavigate,
+//   showHeroBanner = true,
+//   headerVariant = "home",
+// }: HeaderProps) {
+
+//   const [videoFinished, setVideoFinished] = useState(false);
+
+//   const [activeImageIndex, setActiveImageIndex] = useState(0);
+
+
+
+//   const [searchQuery, setSearchQuery] = useState("");
+
+
+
+//   const [searchFocused, setSearchFocused] = useState(false);
+
+//   const [searchOpen, setSearchOpen] = useState(false);
+
+//   const [isScrolled, setIsScrolled] = useState(false);
+//   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+// const activePathByVariant: Record<NonNullable<HeaderProps["headerVariant"]>, string> = {
+
+//     home: "/",
+
+//     serum: "/serum",
+
+//     "face-creams": "/face-creams",
+
+//     "body-creams": "/body-creams",
+
+//     "all-products": "/all-products",
+
+//   };
+
+//   const searchContainerRef = useRef<HTMLDivElement>(null);
+
+//   const searchRef = useRef<HTMLInputElement>(null);
+
+//   const videoRef = useRef<HTMLVideoElement>(null);
+
+//   const videoFailedRef = useRef(false);
+
+
+
+//   // The nav link for the page you are on keeps its gold underline.
+
+//   // Every link you click becomes the active one immediately, and it is
+
+//   // remembered so it survives the page changing underneath the header.
+
+//   const navHrefs = ["/", ...heroNavigation.map((item) => item.href)];
+
+
+
+//   const [activeHref, setActiveHref] = useState<string>(() => {
+
+//     try {
+
+//       const path = window.location.pathname.replace(/\/+$/, "") || "/";
+
+
+
+//       if (path !== "/" && navHrefs.includes(path)) return path;
+
+
+
+//       const stored = window.sessionStorage.getItem("softEditActiveNav");
+
+
+
+//       if (stored && navHrefs.includes(stored)) return stored;
+
+//     } catch {
+
+//       // Storage or window can be unavailable; fall back to the page variant.
+
+//     }
+
+
+
+//     return activePathByVariant[headerVariant];
+
+//   });
+
+
+
+//   useEffect(() => {
+
+//     try {
+
+//       window.sessionStorage.setItem("softEditActiveNav", activeHref);
+
+//     } catch {
+
+//       // Ignore storage errors.
+
+//     }
+
+//   }, [activeHref]);
+
+
+
+//   // Browser back / forward buttons move the underline too.
+
+//   useEffect(() => {
+
+//     function handlePopState() {
+
+//       const path = window.location.pathname.replace(/\/+$/, "") || "/";
+
+
+
+//       if (navHrefs.includes(path)) setActiveHref(path);
+
+//     }
+
+
+
+//     window.addEventListener("popstate", handlePopState);
+
+
+
+//     return () => window.removeEventListener("popstate", handlePopState);
+
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+
+//   }, []);
+
+
+
+//   const currentSlide = {
+
+//     eyebrow: "THE ART OF EVERYDAY SKINCARE",
+
+//     title: ["Your skin,", "your soft ritual."],
+
+//     description:
+
+//       "Thoughtful skincare for the moments that are just for you. Discover your next everyday essential with The Soft Edit.",
+
+//     button: "DISCOVER THE COLLECTION",
+
+//     signature: "A softer kind of glow",
+
+//   };
+
+
+
+//   const searchResults = searchQuery.trim()
+
+//     ? products
+
+//         .filter((product) =>
+
+//           `${product.name} ${product.category}`
+
+//             .toLowerCase()
+
+//             .includes(searchQuery.trim().toLowerCase()),
+
+//         )
+
+//         .slice(0, 4)
+
+//     : [];
+
+
+
+//   // Change the navigation appearance as the page scrolls.
+
+//   useEffect(() => {
+
+//     const handleScroll = () => {
+
+//       setIsScrolled(window.scrollY > 40);
+
+//     };
+
+
+
+//     handleScroll();
+
+
+
+//     window.addEventListener("scroll", handleScroll, { passive: true });
+
+
+
+//     return () => {
+
+//       window.removeEventListener("scroll", handleScroll);
+
+//     };
+
+//   }, []);
+
+
+
+//   // The video leads for six seconds, then every image shows one after the other,
+
+//   // then the video plays again — and the whole story repeats continuously.
+
+//   useEffect(() => {
+
+//     if (!showHeroBanner || !videoFinished) return;
+
+
+
+//     const slideTimeout = window.setTimeout(() => {
+
+//       const isLastImage = activeImageIndex >= heroImageSlides.length - 1;
+
+
+
+//       if (isLastImage && !videoFailedRef.current) {
+
+//         // All images have shown: bring the video back from the start.
+
+//         const video = videoRef.current;
+
+
+
+//         if (video) {
+
+//           video.currentTime = 0;
+
+//           video.play().catch(() => {});
+
+//         }
+
+
+
+//         setActiveImageIndex(0);
+
+//         setVideoFinished(false);
+
+//       } else {
+
+//         setActiveImageIndex((current) => (current + 1) % heroImageSlides.length);
+
+//       }
+
+//     }, 3200);
+
+
+
+//     return () => window.clearTimeout(slideTimeout);
+
+//   }, [showHeroBanner, videoFinished, activeImageIndex]);
+
+
+
+//   useEffect(() => {
+
+//     if (showHeroBanner) {
+
+//       setVideoFinished(false);
+
+//       setActiveImageIndex(0);
+
+//     }
+
+//   }, [showHeroBanner]);
+
+
+
+//   useEffect(() => {
+
+//     function handleEscape(event: KeyboardEvent) {
+
+//       if (event.key === "Escape") {
+
+//         setSearchFocused(false);
+
+//         setSearchOpen(false);
+
+//         setSearchQuery("");
+
+//       }
+
+//     }
+
+
+
+//     document.addEventListener("keydown", handleEscape);
+
+
+
+//     return () => {
+
+//       document.removeEventListener("keydown", handleEscape);
+
+//     };
+
+//   }, []);
+
+
+
+//   useEffect(() => {
+
+//     const handleOutsideClick = (event: MouseEvent) => {
+
+//       const searchContainer = searchContainerRef.current;
+
+
+
+//       if (
+
+//         searchOpen &&
+
+//         searchContainer &&
+
+//         !searchContainer.contains(event.target as Node)
+
+//       ) {
+
+//         setSearchOpen(false);
+
+//         setSearchFocused(false);
+
+//       }
+
+//     };
+
+
+
+//     document.addEventListener("click", handleOutsideClick, true);
+
+
+
+//     return () => {
+
+//       document.removeEventListener("click", handleOutsideClick, true);
+
+//     };
+
+//   }, [searchOpen]);
+
+
+
+//   function closeNavigation() {
+
+//     setSearchFocused(false);
+
+//   }
+
+
+
+//   function openProduct(productId: string | number) {
+
+//     closeNavigation();
+
+//     setSearchOpen(false);
+
+
+
+//     const productElement = document.getElementById(`product-${productId}`);
+
+
+
+//     if (productElement) {
+
+//       productElement.scrollIntoView({
+
+//         behavior: "smooth",
+
+//         block: "center",
+
+//       });
+
+//     } else {
+
+//       document.getElementById("shop")?.scrollIntoView({
+
+//         behavior: "smooth",
+
+//         block: "start",
+
+//       });
+
+//     }
+
+//   }
+
+
+
+//   function handleSearch(event: FormEvent<HTMLFormElement>) {
+
+//     event.preventDefault();
+
+
+
+//     const query = searchQuery.trim().toLowerCase();
+
+
+
+//     if (!query) {
+
+//       searchRef.current?.focus();
+
+//       return;
+
+//     }
+
+
+
+//     const matchingProduct = products.find((product) =>
+
+//       `${product.name} ${product.category}`.toLowerCase().includes(query),
+
+//     );
+
+
+
+//     setSearchFocused(false);
+
+
+
+//     if (matchingProduct) {
+
+//       openProduct(matchingProduct.id);
+
+//     } else {
+
+//       closeNavigation();
+
+//       setSearchOpen(false);
+
+
+
+//       document.getElementById("shop")?.scrollIntoView({
+
+//         behavior: "smooth",
+
+//         block: "start",
+
+//       });
+
+//     }
+
+//   }
+
+
+
+//   return (
+
+//     <section id="home" className="relative w-full">
+
+//       {/* <div
+
+//         className="hero-frame group relative isolate min-h-[650px] w-full overflow-hidden bg-[#30232F] sm:min-h-[720px] lg:min-h-[800px]"
+
+//         aria-label="The Soft Edit skincare campaign video"
+
+//       > */}
+
+//       <div
+
+//   className={`group relative w-full ${
+
+//     showHeroBanner
+
+//       ? "hero-frame isolate min-h-[650px] overflow-hidden bg-[#30232F] sm:min-h-[720px] lg:min-h-[800px]"
+
+//       : "h-0 overflow-visible"
+
+//   }`}
+
+//   aria-label={
+
+//     showHeroBanner
+
+//       ? "The Soft Edit skincare campaign video"
+
+//       : "The Soft Edit navigation"
+
+//   }
+
+// >
+
+//         {/* FULL-WIDTH HERO: VIDEO FIRST, THEN THE FULL-BLEED IMAGE STORY */}
+
+//         {showHeroBanner && (
+
+//           <>
+
+//             {/* The video leads for six seconds before the image sequence takes over. */}
+
+//             <video
+
+//               ref={videoRef}
+
+//               autoPlay
+
+//               muted
+
+//               playsInline
+
+//               preload="auto"
+
+//               aria-label="The Soft Edit luxury skincare campaign"
+
+//               onTimeUpdate={(event) => {
+
+//                 if (event.currentTarget.currentTime >= 6) {
+
+//                   event.currentTarget.pause();
+
+//                   setVideoFinished(true);
+
+//                 }
+
+//               }}
+
+//               onEnded={() => setVideoFinished(true)}
+
+//               onError={() => {
+
+//                 videoFailedRef.current = true;
+
+//                 setVideoFinished(true);
+
+//               }}
+
+//               className={`absolute inset-0 z-0 h-full w-full object-cover object-center transition-opacity duration-[1400ms] ease-in-out ${
+
+//                 videoFinished ? "pointer-events-none opacity-0" : "opacity-100"
+
+//               }`}
+
+//             >
+
+//               <source src="/images/promo1-.mp4" type="video/mp4" />
+
+//               Your browser does not support video playback.
+
+//             </video>
+
+
+
+//             {/* Full-bleed photographs gently drift and crossfade after the video. */}
+
+//             {heroImageSlides.map((slide, index) => (
+
+//               <img
+
+//                 key={`${slide.image}-${index}`}
+
+//                 src={slide.image}
+
+//                 alt={slide.alt}
+
+//                 aria-hidden={!videoFinished || index !== activeImageIndex}
+
+//                 className={`soft-edit-hero-image absolute inset-0 z-0 h-full w-full object-cover object-center transition-[opacity,transform,filter] duration-[2200ms] ease-in-out ${
+
+//                   videoFinished && index === activeImageIndex
+
+//                     ? "scale-100 opacity-100"
+
+//                     : "pointer-events-none scale-[1.06] opacity-0"
+
+//                 }`}
+
+//                 style={{
+
+//                   filter: "saturate(0.91) contrast(1.02)",
+
+//                   animation:
+
+//                     videoFinished && index === activeImageIndex
+
+//                       ? "softEditHeroImageDrift 7s cubic-bezier(0.2, 0.65, 0.25, 1) both"
+
+//                       : "none",
+
+//                 }}
+
+//               />
+
+//             ))}
+
+
+
+//             <style>{`
+
+//               @keyframes softEditHeroImageDrift {
+
+//                 0% { transform: scale(1.055) translate3d(0.8%, 0.3%, 0); }
+
+//                 100% { transform: scale(1) translate3d(-0.4%, 0, 0); }
+
+//               }
+
+//               @media (prefers-reduced-motion: reduce) {
+
+//                 .soft-edit-hero-image { animation: none !important; transition-duration: 400ms !important; }
+
+//               }
+
+//             `}</style>
+
+
+
+//             {/* Restore the original cinematic overlay on the video; keep the stronger image-only shadow below. */}
+
+//             {!videoFinished ? (
+
+//               <>
+
+//                 <div
+
+//                   aria-hidden="true"
+
+//                   className="pointer-events-none absolute inset-0 z-[1]"
+
+//                   style={{
+
+//                     background:
+
+//                       "linear-gradient(90deg, rgba(28, 18, 29, 0.68) 0%, rgba(33, 22, 37, 0.54) 22%, rgba(48, 35, 47, 0.26) 46%, rgba(33, 22, 37, 0.08) 72%, rgba(33, 22, 37, 0.12) 100%)",
+
+//                   }}
+
+//                 />
+
+//                 <div
+
+//                   aria-hidden="true"
+
+//                   className="pointer-events-none absolute inset-0 z-[1]"
+
+//                   style={{
+
+//                     background:
+
+//                       "linear-gradient(0deg, rgba(33, 22, 37, 0.42) 0%, rgba(33, 22, 37, 0.08) 34%, rgba(33, 22, 37, 0.12) 100%)",
+
+//                   }}
+
+//                 />
+
+//               </>
+
+//             ) : (
+
+//               <>
+
+//                 {/* A cinematic plum-black shadow protects the copy on the left, while the images stay vivid on the right. */}
+
+//                 <div
+
+//                   aria-hidden="true"
+
+//                   className="pointer-events-none absolute inset-0 z-[1]"
+
+//                   style={{
+
+//                     background:
+
+//                       "linear-gradient(90deg, rgba(18, 12, 22, 0.88) 0%, rgba(24, 16, 28, 0.78) 18%, rgba(33, 22, 37, 0.58) 34%, rgba(33, 22, 37, 0.30) 49%, rgba(33, 22, 37, 0.08) 68%, rgba(33, 22, 37, 0.02) 100%)",
+
+//                   }}
+
+//                 />
+
+//                 <div
+
+//                   aria-hidden="true"
+
+//                   className="pointer-events-none absolute inset-0 z-[1]"
+
+//                   style={{
+
+//                     background:
+
+//                       "linear-gradient(0deg, rgba(25, 16, 28, 0.30) 0%, rgba(33, 22, 37, 0.05) 36%, rgba(33, 22, 37, 0.04) 100%)",
+
+//                   }}
+
+//                 />
+
+//               </>
+
+//             )}
+
+//           </>
+
+//         )}
+
+
+
+//         {/* STICKY LUXURY HEADER */}
+
+//         {/* <header
+
+//           className={`fixed inset-x-0 top-0 z-[100] w-full text-[#FFF9EF] transition-all duration-500 ${
+
+//             isScrolled
+
+//               ? "border-b border-[#D9BE8B]/40 bg-[#30232F]/95 shadow-[0_8px_30px_rgba(20,12,20,0.22)] backdrop-blur-xl"
+
+//               : "border-b border-transparent bg-transparent"
+
+//           }`}
+
+//         > */}
+
+//         {createPortal(
+
+//         <header
+
+
+
+// className={`fixed inset-x-0 top-0 z-[9999] w-full border-x-0 border-t-0 border-b text-[#FFF9EF] shadow-none transition-[background-color,border-color,backdrop-filter] duration-500 ease-in-out ${
+
+//   headerVariant === "home"
+
+//     ? isScrolled
+
+//       ? "border-b-[#D9BE8B]/40 bg-[#30232F]/[0.97] backdrop-blur-xl"
+
+//       : "border-b-transparent bg-transparent backdrop-blur-none"
+
+//     : "border-b-[#D9BE8B]/40 bg-[#30232F]/[0.97] backdrop-blur-xl"
+
+// }`}
+
+
+
+//   // className={`fixed inset-x-0 top-0 z-[9999] w-full border-x-0 border-t-0 border-b text-[#FFF9EF] shadow-none transition-[background-color,border-color] duration-500 ease-in-out ${
+
+//   //   isScrolled
+
+//   //     ? "border-b-[#D9BE8B]/40 bg-[#30232F]/[0.97] backdrop-blur-xl"
+
+//   //     : "border-b-transparent bg-transparent backdrop-blur-none"
+
+
+
+// >
+
+//           <nav
+
+//             aria-label="Main navigation"
+
+//             className="relative mx-auto flex min-h-[76px] w-full items-center justify-between gap-2 px-3 py-2.5 sm:min-h-[94px] sm:gap-3 sm:px-7 sm:py-4 lg:min-h-[108px] lg:px-10 2xl:px-14"
+
+//           >
+
+//             {/* LEFT NAVIGATION */}
+
+//             <div className="hidden min-w-0 flex-1 items-center justify-start gap-4 lg:flex lg:gap-5">
+
+//               {/* HOME: active only on the homepage */}
+
+//               <a
+
+//                 href="/"
+
+//                 onClick={(event) => {
+
+//                   event.preventDefault();
+
+//                   closeNavigation();
+
+//                   setActiveHref("/");
+
+//                   if (headerVariant !== "home") {
+
+//                     onNavigate("/");
+
+//                   } else {
+
+//                     window.scrollTo({ top: 0, behavior: "smooth" });
+
+//                   }
+
+//                 }}
+
+//                 aria-current={activeHref === "/" ? "page" : undefined}
+
+//                 className={`group/nav relative whitespace-nowrap py-3 text-[14px] font-semibold transition-colors duration-300 ${
+
+//                   activeHref === "/"
+
+//                     ? "text-[#E9CDA0]"
+
+//                     : "text-[#FFF9EF] hover:text-[#E9CDA0]"
+
+//                 }`}
+
+//               >
+
+//                 Home
+
+//                 <span
+
+//                   className={`absolute inset-x-0 bottom-1 h-[1.5px] origin-left bg-[#D9BE8B] transition-transform duration-300 ${
+
+//                     activeHref === "/"
+
+//                       ? "scale-x-100"
+
+//                       : "scale-x-0 group-hover/nav:scale-x-100"
+
+//                   }`}
+
+//                 />
+
+//               </a>
+
+
+
+//               {heroNavigation.map((item) => {
+
+//                 const isActive = item.href === activeHref;
+
+
+
+//                 return (
+
+//                   <button
+
+//                     key={item.label}
+
+//                     type="button"
+
+//                     aria-current={isActive ? "page" : undefined}
+
+//                     onClick={() => {
+
+//                       closeNavigation();
+
+//                       setActiveHref(item.href);
+
+//                       onNavigate(item.href);
+
+//                     }}
+
+//                     className={`group/nav relative flex items-center whitespace-nowrap py-3 text-[14px] font-semibold transition-colors duration-300 ${
+
+//                       isActive
+
+//                         ? "text-[#E9CDA0]"
+
+//                         : "text-[#FFF9EF] hover:text-[#E9CDA0]"
+
+//                     }`}
+
+//                   >
+
+//                     {item.label}
+
+
+
+//                     <span
+
+//                       className={`absolute inset-x-0 bottom-1 h-[1.5px] origin-left bg-[#D9BE8B] transition-transform duration-300 ${
+
+//                         isActive
+
+//                           ? "scale-x-100"
+
+//                           : "scale-x-0 group-hover/nav:scale-x-100"
+
+//                       }`}
+
+//                     />
+
+//                   </button>
+
+//                 );
+
+//               })}
+
+//             </div>
+
+
+
+//             {/* BRAND WORDMARK — LEAF BESIDE THE NAME */}
+
+//             <a
+
+//               href="/"
+
+//               aria-label="The Soft Edit home"
+
+//               onClick={(event) => {
+
+//                 event.preventDefault();
+
+//                 closeNavigation();
+
+//                 setActiveHref("/");
+
+//                 if (headerVariant !== "home") {
+
+//                   onNavigate("/");
+
+//                 } else {
+
+//                   window.scrollTo({ top: 0, behavior: "smooth" });
+
+//                 }
+
+//               }}
+
+//               className="absolute left-[58px] top-1/2 z-10 flex -translate-y-1/2 items-center justify-center gap-2 whitespace-nowrap transition-opacity duration-300 hover:opacity-90 sm:left-1/2 sm:-translate-x-1/2 sm:gap-2.5 lg:left-1/2"
+
+//             >
+
+//               {/* BOTANICAL LEAF ICON */}
+
+//               {/* <Leaf
+
+//                 size={23}
+
+//                 strokeWidth={1.4}
+
+//                 className="shrink-0 text-[#E9CDA0] transition-transform duration-500 hover:rotate-[-12deg] sm:h-[27px] sm:w-[27px]"
+
+//               /> */}
+
+
+
+//               {/* BRAND NAME */}
+
+//               <img
+//                 src={logo}
+//                 alt="The Soft Edit"
+//                 // className="h-auto w-[168px] max-w-[46vw] object-contain sm:w-[205px] sm:max-w-none md:w-[245px] lg:w-[285px] xl:w-[310px]"
+//                 className="h-auto w-[195px] max-w-[52vw] object-contain sm:w-[205px] sm:max-w-none md:w-[245px] lg:w-[285px] xl:w-[310px]"
+//                 style={{
+//                   mixBlendMode: "screen",
+//                   filter: "brightness(1.65) saturate(1.12)",
+//                   imageRendering: "auto",
+//                 }}
+//               />
+
+//             </a>
+
+
+
+//             {/* MOBILE MENU: keeps the full navigation accessible on small screens */}
+//             <button
+//               type="button"
+//               aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+//               aria-expanded={mobileMenuOpen}
+//               onClick={() => setMobileMenuOpen((open) => !open)}
+//               className="relative z-20 flex h-11 w-11 shrink-0 flex-col items-center justify-center gap-[5px] rounded-full text-[#FFF9EF] transition-colors hover:bg-white/10 hover:text-[#E9CDA0] sm:h-12 sm:w-12 lg:hidden"
+//             >
+//               {mobileMenuOpen ? (
+//                 <X size={26} strokeWidth={1.8} />
+//               ) : (
+//                 <>
+//                   <span className="h-[2px] w-6 rounded-full bg-current" />
+//                   <span className="h-[2px] w-6 rounded-full bg-current" />
+//                   <span className="h-[2px] w-6 rounded-full bg-current" />
+//                 </>
+//               )}
+//             </button>
+
+//             {/* RIGHT CONTROLS: LOGIN, SEARCH, CART */}
+
+//             <div className="ml-auto flex min-w-0 items-center justify-end gap-2 sm:gap-4 lg:gap-5">
+
+//               {/* LOGIN / REGISTER */}
+
+//               <div
+//                 className="hidden shrink-0 items-center gap-0 whitespace-nowrap text-[12px] font-semibold sm:flex sm:text-[15px]"
+//               >
+
+//                 <a
+
+//                   href="/login"
+
+//                   className="group/account relative py-2 text-[#FFF9EF] transition-colors duration-300 hover:text-[#E9CDA0]"
+
+//                 >
+
+//                   Login
+
+//                   <span className="absolute inset-x-0 bottom-0 h-[1.5px] origin-left scale-x-0 bg-[#D9BE8B] transition-transform duration-300 group-hover/account:scale-x-100" />
+
+//                 </a>
+
+
+
+//                 <span className="px-1.5 text-[#D9BE8B]/80">/</span>
+
+
+
+//                 <a
+
+//                   href="/register"
+
+//                   className="group/account relative py-2 text-[#FFF9EF] transition-colors duration-300 hover:text-[#E9CDA0]"
+
+//                 >
+
+//                   Register
+
+//                   <span className="absolute inset-x-0 bottom-0 h-[1.5px] origin-left scale-x-0 bg-[#D9BE8B] transition-transform duration-300 group-hover/account:scale-x-100" />
+
+//                 </a>
+
+//               </div>
+
+
+
+//               {/* COLLAPSIBLE SEARCH */}
+
+//               <div
+
+//                 ref={searchContainerRef}
+
+//                 className="relative flex shrink-0 items-center justify-end"
+
+//               >
+
+//                 <form
+
+//                   role="search"
+
+//                   onSubmit={handleSearch}
+
+//                   className={`relative flex items-center transition-all duration-300 ease-in-out ${
+
+//                     searchOpen
+
+//                       ? "w-[135px] sm:w-[185px] lg:w-[205px]"
+
+//                       : "w-9"
+
+//                   }`}
+
+//                 >
+
+//                   <div
+
+//                     className={`flex h-11 w-full items-center overflow-hidden rounded-full border transition-all duration-300 sm:h-11 ${
+
+//                       searchOpen
+
+//                         ? "border-[#D9BE8B] bg-[#30232F]/80 pl-3 pr-2 shadow-[0_0_0_3px_rgba(217,190,139,0.10)]"
+
+//                         : "justify-end border-transparent bg-transparent"
+
+//                     }`}
+
+//                   >
+
+//                     {searchOpen && (
+
+//                       <input
+
+//                         ref={searchRef}
+
+//                         type="search"
+
+//                         value={searchQuery}
+
+//                         onChange={(event) =>
+
+//                           setSearchQuery(event.target.value)
+
+//                         }
+
+//                         onFocus={() => setSearchFocused(true)}
+
+//                         onBlur={() => {
+
+//                           window.setTimeout(() => {
+
+//                             setSearchFocused(false);
+
+//                           }, 180);
+
+//                         }}
+
+//                         placeholder="Search products..."
+
+//                         aria-label="Search products"
+
+//                         aria-expanded={
+
+//                           searchFocused && searchResults.length > 0
+
+//                         }
+
+//                         className="h-full min-w-0 flex-1 border-0 bg-transparent p-0 text-[12px] text-[#FFF9EF] outline-none ring-0 placeholder:text-[#FFF9EF]/65 focus:border-0 focus:outline-none focus:ring-0 sm:text-[13px]"
+
+//                       />
+
+//                     )}
+
+
+
+//                     {searchOpen && searchQuery && (
+
+//                       <button
+
+//                         type="button"
+
+//                         aria-label="Clear search"
+
+//                         onMouseDown={(event) => event.preventDefault()}
+
+//                         onClick={() => {
+
+//                           setSearchQuery("");
+
+//                           searchRef.current?.focus();
+
+//                         }}
+
+//                         className="ml-1 shrink-0 text-[#AAA39D] transition-colors hover:text-[#E9CDA0]"
+
+//                       >
+
+//                         <X size={14} />
+
+//                       </button>
+
+//                     )}
+
+
+
+//                     <button
+
+//                       type={searchOpen ? "submit" : "button"}
+
+//                       aria-label={
+
+//                         searchOpen ? "Submit product search" : "Open search"
+
+//                       }
+
+//                       onClick={() => {
+
+//                         if (!searchOpen) {
+
+//                           setSearchOpen(true);
+
+//                           window.setTimeout(() => {
+
+//                             searchRef.current?.focus();
+
+//                           }, 180);
+
+//                         }
+
+//                       }}
+
+//                       className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-colors duration-300 ${
+
+//                         searchOpen
+
+//                           ? "text-[#E9CDA0] hover:text-[#FFF9EF]"
+
+//                           : "text-[#E9CDA0] hover:bg-white/10 hover:text-[#FFF9EF]"
+
+//                       }`}
+
+//                     >
+
+//                       <Search size={22} strokeWidth={1.8} />
+
+//                     </button>
+
+//                   </div>
+
+
+
+//                   {/* SEARCH SUGGESTIONS */}
+
+//                   {searchOpen &&
+
+//                     searchFocused &&
+
+//                     searchResults.length > 0 && (
+
+//                       <div className="absolute right-0 top-full z-[110] mt-3 w-[min(320px,calc(100vw-24px))] overflow-hidden rounded-xl border border-[#D9BE8B]/40 bg-[#30232F]/[0.98] p-2 shadow-[0_20px_55px_rgba(20,12,20,0.38)] backdrop-blur-xl">
+
+//                         <p className="px-3 pb-2 pt-3 text-[10px] tracking-[0.18em] text-[#D9BE8B]">
+
+//                           DISCOVER YOUR NEXT FAVOURITE
+
+//                         </p>
+
+
+
+//                         {searchResults.map((product) => (
+
+//                           <button
+
+//                             key={product.id}
+
+//                             type="button"
+
+//                             onMouseDown={(event) => event.preventDefault()}
+
+//                             onClick={() => openProduct(product.id)}
+
+//                             className="flex w-full items-center justify-between gap-3 rounded-lg px-3 py-3 text-left text-[13px] text-[#FFF9EF] transition-colors duration-200 hover:bg-white/[0.08] hover:text-[#E9CDA0]"
+
+//                           >
+
+//                             <span className="min-w-0 truncate">
+
+//                               {product.name}
+
+//                             </span>
+
+
+
+//                             <ArrowUpRight
+
+//                               size={15}
+
+//                               className="shrink-0 text-[#D9BE8B]"
+
+//                             />
+
+//                           </button>
+
+//                         ))}
+
+//                       </div>
+
+//                     )}
+
+
+
+//                   {searchOpen &&
+
+//                     searchFocused &&
+
+//                     searchQuery.trim().length > 0 &&
+
+//                     searchResults.length === 0 && (
+
+//                       <div className="absolute right-0 top-full z-[110] mt-3 w-[min(320px,calc(100vw-24px))] rounded-xl border border-[#D9BE8B]/40 bg-[#30232F]/[0.98] p-5 shadow-xl backdrop-blur-xl">
+
+//                         <p className="text-[13px] leading-6 text-[#FFF9EF]">
+
+//                           We couldn't find a match. Try another product name
+
+//                           or category.
+
+//                         </p>
+
+//                       </div>
+
+//                     )}
+
+//                 </form>
+
+//               </div>
+
+
+
+//               {/* CART */}
+
+//               <button
+
+//                 type="button"
+
+//                 onClick={onOpenBag}
+
+//                 aria-label={`Open cart, ${bagCount} items`}
+
+//                 title="Cart"
+
+//                 className="group/cart relative flex h-11 w-10 shrink-0 items-center justify-center text-[#FFF9EF] transition-colors duration-300 hover:text-[#E9CDA0] sm:h-11 sm:w-11"
+
+//               >
+
+//                 <ShoppingCart
+
+//                   size={25}
+
+//                   strokeWidth={1.7}
+
+//                   className="transition-transform duration-300 group-hover/cart:-translate-y-0.5"
+
+//                 />
+
+
+
+//                 {bagCount > 0 && (
+
+//                   <span className="absolute right-0 top-0 flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-[#E9CDA0] px-1 text-[10px] font-semibold text-[#30232F]">
+
+//                     {bagCount}
+
+//                   </span>
+
+//                 )}
+
+//               </button>
+//             </div>
+
+//             {/* MOBILE NAVIGATION DRAWER */}
+//             {mobileMenuOpen && (
+//               <div className="absolute inset-x-3 top-[calc(100%-2px)] z-[10000] overflow-hidden rounded-2xl border border-[#D9BE8B]/35 bg-[#30232F]/[0.99] p-3 shadow-[0_22px_60px_rgba(15,8,15,0.45)] backdrop-blur-2xl lg:hidden">
+//                 <p className="px-3 pb-2 pt-2 text-[11px] font-semibold tracking-[0.2em] text-[#D9BE8B]">
+//                   EXPLORE THE SOFT EDIT
+//                 </p>
+//                 <div className="flex flex-col">
+//                   <button
+//                     type="button"
+//                     onClick={() => {
+//                       closeNavigation();
+//                       setActiveHref("/");
+//                       setMobileMenuOpen(false);
+//                       if (headerVariant !== "home") onNavigate("/");
+//                       else window.scrollTo({ top: 0, behavior: "smooth" });
+//                     }}
+//                     className={`flex min-h-12 items-center justify-between rounded-xl px-3 text-left text-[16px] font-medium transition-colors hover:bg-white/[0.07] ${activeHref === "/" ? "text-[#E9CDA0]" : "text-[#FFF9EF]"}`}
+//                   >
+//                     Home <ArrowUpRight size={17} />
+//                   </button>
+//                   {heroNavigation.map((item) => (
+//                     <button
+//                       key={item.label}
+//                       type="button"
+//                       aria-current={activeHref === item.href ? "page" : undefined}
+//                       onClick={() => {
+//                         closeNavigation();
+//                         setActiveHref(item.href);
+//                         setMobileMenuOpen(false);
+//                         onNavigate(item.href);
+//                       }}
+//                       className={`flex min-h-12 items-center justify-between rounded-xl px-3 text-left text-[16px] font-medium transition-colors hover:bg-white/[0.07] ${activeHref === item.href ? "text-[#E9CDA0]" : "text-[#FFF9EF]"}`}
+//                     >
+//                       {item.label} <ArrowUpRight size={17} />
+//                     </button>
+//                   ))}
+//                 </div>
+//                 <div className="mt-2 grid grid-cols-2 gap-2 border-t border-[#D9BE8B]/20 pt-3">
+//                   <a href="/login" onClick={() => setMobileMenuOpen(false)} className="flex min-h-11 items-center justify-center rounded-xl border border-[#D9BE8B]/55 px-3 text-[14px] font-semibold text-[#FFF9EF] transition-colors hover:bg-[#D9BE8B]/10 hover:text-[#E9CDA0]">Login</a>
+//                   <a href="/register" onClick={() => setMobileMenuOpen(false)} className="flex min-h-11 items-center justify-center rounded-xl bg-[#F7F2EA] px-3 text-[14px] font-semibold text-[#30232F] transition-colors hover:bg-[#D9BE8B]">Register</a>
+//                 </div>
+//               </div>
+//             )}
+
+//           </nav>
+
+//         </header>,
+
+//         document.body,
+
+//         )}
+
+
+
+//         {/* HERO COPY */}
+
+//         {showHeroBanner && (
+
+//         <div className="hero-copy relative z-20 flex min-h-[650px] w-full max-w-none flex-col items-center justify-center px-5 pb-28 pt-32 text-center text-white sm:min-h-[720px] sm:items-start sm:px-8 sm:pb-28 sm:pt-40 sm:text-left lg:min-h-[800px] lg:w-[55%] lg:px-12 lg:pt-44 xl:px-16">
+
+//           <div className="hero-copy-item mb-5 flex items-center justify-center gap-3 sm:mb-7 sm:justify-start">
+
+//             <span className="hero-gold-line h-px w-9 bg-[#B99A62]" />
+
+
+
+//             <p className="text-[10px] font-medium tracking-[0.12em] text-[#E4C99B] sm:text-xs sm:tracking-[0.23em]">
+
+//               {currentSlide.eyebrow}
+
+//             </p>
+
+//           </div>
+
+
+
+//           <h1
+
+//             className="hero-copy-item hero-headline mx-auto max-w-[390px] font-serif text-[43px] font-normal leading-[1.08] tracking-[-0.045em] sm:mx-0 sm:max-w-full sm:text-4xl sm:leading-[1.08] lg:text-6xl xl:text-[76px]"
+
+//             style={{ animationDelay: "120ms" }}
+
+//           >
+
+//             {currentSlide.title.map((line, index) => (
+
+//               <span
+
+//                 key={`${line}-${index}`}
+
+//                 className={`hero-title-line block ${
+
+//                   index === 1
+
+//                     ? "italic text-[#DCC09A]"
+
+//                     : "text-[#FBF6EF]"
+
+//                 }`}
+
+//                 style={{ animationDelay: `${180 + index * 140}ms` }}
+
+//               >
+
+//                 {line}
+
+//               </span>
+
+//             ))}
+
+//           </h1>
+
+
+
+//           <p
+
+//             className="hero-copy-item mt-5 max-w-[350px] text-[15px] leading-7 text-white/90 sm:mt-6 sm:max-w-[340px] sm:text-sm sm:leading-7 lg:text-base"
+
+//             style={{ animationDelay: "430ms" }}
+
+//           >
+
+//             {currentSlide.description}
+
+//           </p>
+
+
+
+//           <a
+
+//             href="#shop"
+
+//             className="hero-copy-item hero-cta group/cta mb-5 mt-7 inline-flex items-center justify-center gap-5 border border-[#F7F2EA] bg-[#F7F2EA] px-5 py-4 text-[10px] font-semibold tracking-[0.12em] text-[#30232F] transition-all duration-500 hover:-translate-y-1 hover:border-[#B99A62] hover:bg-[#B99A62] hover:text-[#211820] sm:mt-9 sm:gap-8 sm:px-7 sm:text-xs sm:tracking-[0.16em]"
+
+//             style={{ animationDelay: "520ms" }}
+
+//           >
+
+//             <span className="text-[#30232F] transition-colors duration-500 group-hover/cta:text-[#211820]">
+
+//               {currentSlide.button}
+
+//             </span>
+
+
+
+//             <ArrowUpRight
+
+//               size={17}
+
+//               className="shrink-0 text-[#30232F] transition-all duration-500 group-hover/cta:translate-x-1 group-hover/cta:-translate-y-1 group-hover/cta:text-[#211820]"
+
+//             />
+
+//           </a>
+
+
+
+//           <a
+
+//             href="#categories"
+
+//             className="hero-copy-item absolute bottom-5 left-4 flex items-center gap-2 text-[9px] tracking-[0.08em] text-white/90 transition-colors duration-300 hover:text-[#B99A62] sm:bottom-8 sm:left-12 sm:gap-3 sm:text-[9px] sm:tracking-[0.14em] lg:left-20"
+
+//             style={{ animationDelay: "650ms" }}
+
+//           >
+
+//             <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/50 transition-all duration-500 hover:border-[#B99A62] hover:bg-[#B99A62]/15">
+
+//               <ArrowDown size={15} />
+
+//             </span>
+
+
+
+//             A MOMENT FOR YOURSELF
+
+//           </a>
+
+
+
+//           {/* EXISTING SIGNATURE */}
+
+//           <div className="mt-2 text-center sm:mt-0 sm:text-left" style={{ animationDelay: "700ms" }}>
+
+//             <p className="font-serif text-lg italic sm:text-2xl">
+
+//               {currentSlide.signature}
+
+//             </p>
+
+
+
+//             <p className="mt-1 text-[13px] tracking-[0.2em] sm:mt-2 sm:text-[22px]">
+
+//               THE SOFT EDIT
+
+//             </p>
+
+//           </div>
+
+//         </div>
+
+//          )}
+
+//       </div>
+
+//     </section>
+
+//   );
+
+// }
 
 // function Hero({
 //   bagCount,
