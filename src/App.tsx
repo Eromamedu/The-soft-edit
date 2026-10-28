@@ -1932,7 +1932,8 @@ const heroImageSlides = [
   {
     image:
       // "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=2200&q=90",
-        "../src/images/imageb.jpg",
+        // "../src/images/imageb.jpg",
+                "../public/images/imageb.jpg",
     alt: "Relaxing facial skincare treatment",
     eyebrow: "YOUR MOMENT OF SELF-CARE",
     title: ["Make room", "for your", "glow."],
