@@ -1,6 +1,6 @@
 
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/App.tsx" }]
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
 
 
