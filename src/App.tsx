@@ -6,6 +6,15 @@ import SerumCollectionPage from "./pages/SerumCollectionPage";
 import BodyCreamCollectionPage from "./pages/creampage";
 import AllProductsPage from "./pages/AllProductsPage";
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import image3 from "./images/image3.jpg";
+import imageC from "./images/imagec.jpg";
+import imageE from "./images/imagee.jpg";
+import imageH from "./images/imageh.jpg";
+import imag1 from "./images/imag1.jpg";
+import imageWA0004 from "./images/IMG-20261026-WA0004.jpg";
+import imageWA0006 from "./images/IMG-20261026-WA0006.jpg";
+import imageWA0007 from "./images/IMG-20261026-WA0007.jpg";
+import imageWA0008 from "./images/IMG-20261026-WA0008.jpg";
 import {
   ArrowDown,
    ArrowUpRight,
@@ -171,66 +180,125 @@ export function scrollToSection(id: string) {
 //               Your browser does not support video playback.
 
 
+// const heroImageSlides = [
+//   {
+//     image:
+//                 "../public/images/imageb.jpg",
+//     alt: "Relaxing facial skincare treatment",
+//     eyebrow: "YOUR MOMENT OF SELF-CARE",
+//     title: ["Make room", "for your", "glow."],
+//     description:
+//       "Turn your everyday routine into a little luxury, with thoughtful essentials that make caring for yourself feel special.",
+//     button: "FIND YOUR RITUAL",
+//     signature: "A softer kind of self-care.",
+//   },
+
+//   {
+//     image:
+//         "../src/images/image3.jpg",
+//     alt: "Relaxing facial skincare treatment",
+//     eyebrow: "YOUR MOMENT OF SELF-CARE",
+//     title: ["Make room", "for your", "glow."],
+//     description:
+//       "Turn your everyday routine into a little luxury, with thoughtful essentials that make caring for yourself feel special.",
+//     button: "FIND YOUR RITUAL",
+//     signature: "A softer kind of self-care.",
+//   },
+//    {
+//     image:
+//         "../src/images/IMG-20261026-WA0004.jpg",
+//     alt: "Relaxing facial skincare treatment",
+//     eyebrow: "YOUR MOMENT OF SELF-CARE",
+//     title: ["Make room", "for your", "glow."],
+//     description:
+//       "Turn your everyday routine into a little luxury, with thoughtful essentials that make caring for yourself feel special.",
+//     button: "FIND YOUR RITUAL",
+//     signature: "A softer kind of self-care.",
+//   },
+//    {
+//     image:
+//         "../src/images/IMG-20261026-WA0006.jpg",
+//     alt: "Relaxing facial skincare treatment",
+//     eyebrow: "YOUR MOMENT OF SELF-CARE",
+//     title: ["Make room", "for your", "glow."],
+//     description:
+//       "Turn your everyday routine into a little luxury, with thoughtful essentials that make caring for yourself feel special.",
+//     button: "FIND YOUR RITUAL",
+//     signature: "A softer kind of self-care.",
+//   },
+//    {
+//     image:
+//         "../src/images/IMG-20261026-WA0007.jpg",
+//     alt: "Relaxing facial skincare treatment",
+//     eyebrow: "YOUR MOMENT OF SELF-CARE",
+//     title: ["Make room", "for your", "glow."],
+//     description:
+//       "Turn your everyday routine into a little luxury, with thoughtful essentials that make caring for yourself feel special.",
+//     button: "FIND YOUR RITUAL",
+//     signature: "A softer kind of self-care.",
+//   },
+//    {
+//     image:
+//         "../src/images/IMG-20261026-WA0008.jpg",
+//     alt: "Relaxing facial skincare treatment",
+//     eyebrow: "YOUR MOMENT OF SELF-CARE",
+//     title: ["Make room", "for your", "glow."],
+//     description:
+//       "Turn your everyday routine into a little luxury, with thoughtful essentials that make caring for yourself feel special.",
+//     button: "FIND YOUR RITUAL",
+//     signature: "A softer kind of self-care.",
+//   },
+//   {
+//     image:
+//         "../src/images/imagec.jpg",
+//     alt: "Beautifully presented skincare products",
+//     eyebrow: "LESS NOISE. MORE GLOW.",
+//     title: ["Good skin", "starts with", "good care."],
+//     description:
+//       "Discover considered beauty essentials selected to make your routine simpler, more enjoyable, and uniquely yours.",
+//     button: "SHOP SKINCARE",
+//     signature: "Care that feels like you.",
+//   },
+//   {
+//     image:
+//         "../src/images/imagee.jpg",
+//     alt: "Minimal, elegant skincare and beauty essentials",
+//     eyebrow: "BEAUTY, WITH INTENTION",
+//     title: ["Thoughtful", "care. Natural", "confidence."],
+//     description:
+//       "Meet a more considered approach to beauty, with skincare favourites chosen to complement your everyday routine.",
+//     button: "MEET YOUR FAVOURITES",
+//     signature: "Beauty on your own terms.",
+//   },
+//   {
+//     image:
+//         "../src/images/imageh.jpg",
+//     alt: "Premium beauty products in a refined skincare setting",
+//     eyebrow: "YOUR GLOW, YOUR WAY",
+//     title: ["Feel good", "in your", "own skin."],
+//     description:
+//       "Celebrate the skin you're in with a thoughtful edit of beauty essentials made for your moments, your pace, and your glow.",
+//     button: "SHOP THE COLLECTION",
+//     signature: "Always beautifully you.",
+//   },
+
+//   {
+//     image:
+//         "../src/images/imag1.jpg",
+//     alt: "Premium beauty products in a refined skincare setting",
+//     eyebrow: "YOUR GLOW, YOUR WAY",
+//     title: ["Feel good", "in your", "own skin."],
+//     description:
+//       "Celebrate the skin you're in with a thoughtful edit of beauty essentials made for your moments, your pace, and your glow.",
+//     button: "SHOP THE COLLECTION",
+//     signature: "Always beautifully you.",
+//   },
+// ];
+
+
 const heroImageSlides = [
   {
-    image:
-                "../public/images/imageb.jpg",
-    alt: "Relaxing facial skincare treatment",
-    eyebrow: "YOUR MOMENT OF SELF-CARE",
-    title: ["Make room", "for your", "glow."],
-    description:
-      "Turn your everyday routine into a little luxury, with thoughtful essentials that make caring for yourself feel special.",
-    button: "FIND YOUR RITUAL",
-    signature: "A softer kind of self-care.",
-  },
-
-  {
-    image:
-        "../src/images/image3.jpg",
-    alt: "Relaxing facial skincare treatment",
-    eyebrow: "YOUR MOMENT OF SELF-CARE",
-    title: ["Make room", "for your", "glow."],
-    description:
-      "Turn your everyday routine into a little luxury, with thoughtful essentials that make caring for yourself feel special.",
-    button: "FIND YOUR RITUAL",
-    signature: "A softer kind of self-care.",
-  },
-   {
-    image:
-        "../src/images/IMG-20261026-WA0004.jpg",
-    alt: "Relaxing facial skincare treatment",
-    eyebrow: "YOUR MOMENT OF SELF-CARE",
-    title: ["Make room", "for your", "glow."],
-    description:
-      "Turn your everyday routine into a little luxury, with thoughtful essentials that make caring for yourself feel special.",
-    button: "FIND YOUR RITUAL",
-    signature: "A softer kind of self-care.",
-  },
-   {
-    image:
-        "../src/images/IMG-20261026-WA0006.jpg",
-    alt: "Relaxing facial skincare treatment",
-    eyebrow: "YOUR MOMENT OF SELF-CARE",
-    title: ["Make room", "for your", "glow."],
-    description:
-      "Turn your everyday routine into a little luxury, with thoughtful essentials that make caring for yourself feel special.",
-    button: "FIND YOUR RITUAL",
-    signature: "A softer kind of self-care.",
-  },
-   {
-    image:
-        "../src/images/IMG-20261026-WA0007.jpg",
-    alt: "Relaxing facial skincare treatment",
-    eyebrow: "YOUR MOMENT OF SELF-CARE",
-    title: ["Make room", "for your", "glow."],
-    description:
-      "Turn your everyday routine into a little luxury, with thoughtful essentials that make caring for yourself feel special.",
-    button: "FIND YOUR RITUAL",
-    signature: "A softer kind of self-care.",
-  },
-   {
-    image:
-        "../src/images/IMG-20261026-WA0008.jpg",
+    image: "/images/imageb.jpg",
     alt: "Relaxing facial skincare treatment",
     eyebrow: "YOUR MOMENT OF SELF-CARE",
     title: ["Make room", "for your", "glow."],
@@ -240,8 +308,57 @@ const heroImageSlides = [
     signature: "A softer kind of self-care.",
   },
   {
-    image:
-        "../src/images/imagec.jpg",
+    image: image3,
+    alt: "Relaxing facial skincare treatment",
+    eyebrow: "YOUR MOMENT OF SELF-CARE",
+    title: ["Make room", "for your", "glow."],
+    description:
+      "Turn your everyday routine into a little luxury, with thoughtful essentials that make caring for yourself feel special.",
+    button: "FIND YOUR RITUAL",
+    signature: "A softer kind of self-care.",
+  },
+  {
+    image: imageWA0004,
+    alt: "Relaxing facial skincare treatment",
+    eyebrow: "YOUR MOMENT OF SELF-CARE",
+    title: ["Make room", "for your", "glow."],
+    description:
+      "Turn your everyday routine into a little luxury, with thoughtful essentials that make caring for yourself feel special.",
+    button: "FIND YOUR RITUAL",
+    signature: "A softer kind of self-care.",
+  },
+  {
+    image: imageWA0006,
+    alt: "Relaxing facial skincare treatment",
+    eyebrow: "YOUR MOMENT OF SELF-CARE",
+    title: ["Make room", "for your", "glow."],
+    description:
+      "Turn your everyday routine into a little luxury, with thoughtful essentials that make caring for yourself feel special.",
+    button: "FIND YOUR RITUAL",
+    signature: "A softer kind of self-care.",
+  },
+  {
+    image: imageWA0007,
+    alt: "Relaxing facial skincare treatment",
+    eyebrow: "YOUR MOMENT OF SELF-CARE",
+    title: ["Make room", "for your", "glow."],
+    description:
+      "Turn your everyday routine into a little luxury, with thoughtful essentials that make caring for yourself feel special.",
+    button: "FIND YOUR RITUAL",
+    signature: "A softer kind of self-care.",
+  },
+  {
+    image: imageWA0008,
+    alt: "Relaxing facial skincare treatment",
+    eyebrow: "YOUR MOMENT OF SELF-CARE",
+    title: ["Make room", "for your", "glow."],
+    description:
+      "Turn your everyday routine into a little luxury, with thoughtful essentials that make caring for yourself feel special.",
+    button: "FIND YOUR RITUAL",
+    signature: "A softer kind of self-care.",
+  },
+  {
+    image: imageC,
     alt: "Beautifully presented skincare products",
     eyebrow: "LESS NOISE. MORE GLOW.",
     title: ["Good skin", "starts with", "good care."],
@@ -251,8 +368,7 @@ const heroImageSlides = [
     signature: "Care that feels like you.",
   },
   {
-    image:
-        "../src/images/imagee.jpg",
+    image: imageE,
     alt: "Minimal, elegant skincare and beauty essentials",
     eyebrow: "BEAUTY, WITH INTENTION",
     title: ["Thoughtful", "care. Natural", "confidence."],
@@ -262,8 +378,7 @@ const heroImageSlides = [
     signature: "Beauty on your own terms.",
   },
   {
-    image:
-        "../src/images/imageh.jpg",
+    image: imageH,
     alt: "Premium beauty products in a refined skincare setting",
     eyebrow: "YOUR GLOW, YOUR WAY",
     title: ["Feel good", "in your", "own skin."],
@@ -272,10 +387,8 @@ const heroImageSlides = [
     button: "SHOP THE COLLECTION",
     signature: "Always beautifully you.",
   },
-
   {
-    image:
-        "../src/images/imag1.jpg",
+    image: imag1,
     alt: "Premium beauty products in a refined skincare setting",
     eyebrow: "YOUR GLOW, YOUR WAY",
     title: ["Feel good", "in your", "own skin."],
@@ -285,6 +398,7 @@ const heroImageSlides = [
     signature: "Always beautifully you.",
   },
 ];
+
 
 
 type HeaderProps = {
