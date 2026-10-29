@@ -106,7 +106,7 @@ export function ProductLine({ onAddToBag, saved, onToggleSaved, go }: CommercePr
         </Reveal>
 
         <div className="mt-12 sm:mt-16">
-          <Carousel interval={2800}>
+          <Carousel interval={1800}>
             {STORE_PRODUCTS.map((p) => (
               <ProductCard
                 key={p.id}
@@ -195,6 +195,91 @@ export function FeaturedCollections({ go }: Pick<CommerceProps, "go">) {
   );
 }
 
+// /* ================= 4. SHOP BANNERS (3s auto slide) ================= */
+
+// export function ShopBanners({ go }: Pick<CommerceProps, "go">) {
+//   const [active, setActive] = useState(0);
+//   const paused = useRef(false);
+//   const total = SHOP_BANNERS.length;
+
+//   useEffect(() => {
+//     const t = window.setInterval(() => {
+//       if (!paused.current) setActive((a) => (a + 1) % total);
+//     }, 3000);
+//     return () => window.clearInterval(t);
+//   }, [total]);
+
+//   return (
+//     <section
+//       className="relative isolate overflow-hidden bg-[#2D1038]"
+//       onMouseEnter={() => (paused.current = true)}
+//       onMouseLeave={() => (paused.current = false)}
+//     >
+//       <div className="relative min-h-[460px] sm:min-h-[540px] lg:min-h-[620px]">
+//         {SHOP_BANNERS.map((b, i) => (
+//           <div
+//             key={b.collection}
+//             aria-hidden={i !== active}
+//             className={`absolute inset-0 transition-opacity duration-[1400ms] ease-in-out ${
+//               i === active ? "opacity-100" : "pointer-events-none opacity-0"
+//             }`}
+//           >
+//             <img
+//               src={`https://loremflickr.com/1800/1000/${b.kw}?lock=${500 + i}`}
+//               alt={b.collection}
+//               loading="lazy"
+//               className={`absolute inset-0 h-full w-full object-cover transition-transform duration-[6000ms] ease-out ${
+//                 i === active ? "scale-100" : "scale-110"
+//               }`}
+//             />
+//             <div className="absolute inset-0 bg-gradient-to-r from-[#2D1038]/95 via-[#4B165C]/70 to-[#4B165C]/20" />
+//             <div className="pointer-events-none absolute inset-4 border border-white/15 sm:inset-8" />
+
+//             <div className="relative mx-auto flex h-full max-w-[1440px] items-center px-10 sm:px-20 lg:px-28">
+//               <div className="max-w-xl py-16">
+//                 <div className="mb-5 flex items-center gap-3">
+//                   <span className="h-px w-10 bg-[#B99A62]" />
+//                   <p className="text-[10px] uppercase tracking-[0.28em] text-[#E8D2A7]">
+//                     The Soft Edit · {b.collection}
+//                   </p>
+//                 </div>
+//                 <h2 className="font-serif text-4xl italic leading-[1.1] tracking-[-0.03em] text-[#F7F2EA] sm:text-5xl lg:text-6xl">
+//                   {b.headline}
+//                 </h2>
+//                 <p className="mt-5 max-w-md text-sm leading-7 text-white/85 sm:text-base sm:leading-8">{b.text}</p>
+//                 <button
+//                   type="button"
+//                   onClick={() => go(`/collection/${slugify(b.collection)}`)}
+//                   className="group mt-8 inline-flex items-center gap-6 border border-[#F7F2EA] bg-[#F7F2EA] px-7 py-4 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#4B165C] transition-all duration-300 hover:-translate-y-1 hover:border-[#B99A62] hover:bg-[#B99A62] hover:text-[#32103D]"
+//                 >
+//                   Shop now
+//                   <ArrowUpRight size={17} className="transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1" />
+//                 </button>
+//               </div>
+//             </div>
+//           </div>
+//         ))}
+
+//         <ArrowButton dark dir="left" onClick={() => setActive((a) => (a - 1 + total) % total)} className="absolute left-3 top-1/2 z-10 -translate-y-1/2 sm:left-6" />
+//         <ArrowButton dark dir="right" onClick={() => setActive((a) => (a + 1) % total)} className="absolute right-3 top-1/2 z-10 -translate-y-1/2 sm:right-6" />
+
+//         <div className="absolute inset-x-0 bottom-6 z-10 flex justify-center gap-2">
+//           {SHOP_BANNERS.map((b, i) => (
+//             <button
+//               key={b.collection}
+//               type="button"
+//               aria-label={`Show ${b.collection} banner`}
+//               onClick={() => setActive(i)}
+//               className={`h-[3px] rounded-full transition-all duration-500 ${i === active ? "w-10 bg-[#D9BE8B]" : "w-5 bg-white/40"}`}
+//             />
+//           ))}
+//         </div>
+//       </div>
+//     </section>
+//   );
+// }
+
+
 /* ================= 4. SHOP BANNERS (3s auto slide) ================= */
 
 export function ShopBanners({ go }: Pick<CommerceProps, "go">) {
@@ -202,75 +287,191 @@ export function ShopBanners({ go }: Pick<CommerceProps, "go">) {
   const paused = useRef(false);
   const total = SHOP_BANNERS.length;
 
+  const bannerImages: Record<string, string> = {
+    skincare:
+      "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=2000&q=85",
+    serum:
+      "https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=2000&q=85",
+    makeup:
+      "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=2000&q=85",
+    candle:
+      "https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=2000&q=85",
+    bag:
+      "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=2000&q=85",
+    mirror:
+      "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=2000&q=85",
+    plant:
+      "https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=2000&q=85",
+    home:
+      "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=2000&q=85",
+    linen:
+      "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=2000&q=85",
+    gift:
+      "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&w=2000&q=85",
+    default:
+      "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=2000&q=85",
+  };
+
+  function getBannerImage(collection: string, keyword: string) {
+    const description = `${collection} ${keyword}`.toLowerCase();
+
+    if (/serum|skincare|skin care|cream|moisturi[sz]er|cleanser/.test(description)) {
+      return bannerImages.serum;
+    }
+
+    if (/makeup|cosmetic|beauty/.test(description)) {
+      return bannerImages.makeup;
+    }
+
+    if (/candle|aroma|fragrance/.test(description)) {
+      return bannerImages.candle;
+    }
+
+    if (/bag|tote|handbag|purse/.test(description)) {
+      return bannerImages.bag;
+    }
+
+    if (/mirror|interior|furniture|decor|decoration/.test(description)) {
+      return bannerImages.mirror;
+    }
+
+    if (/plant|pot|flower|greenery/.test(description)) {
+      return bannerImages.plant;
+    }
+
+    if (/throw|linen|blanket|bedding|bedroom/.test(description)) {
+      return bannerImages.linen;
+    }
+
+    if (/gift|present|bundle|set/.test(description)) {
+      return bannerImages.gift;
+    }
+
+    if (/home|living|tableware|homeware/.test(description)) {
+      return bannerImages.home;
+    }
+
+    return bannerImages.default;
+  }
+
   useEffect(() => {
-    const t = window.setInterval(() => {
-      if (!paused.current) setActive((a) => (a + 1) % total);
-    }, 3000);
-    return () => window.clearInterval(t);
+    if (total <= 1) return;
+
+    const timer = window.setInterval(() => {
+      if (!paused.current) {
+        setActive((current) => (current + 1) % total);
+      }
+    }, 2300);
+
+    return () => window.clearInterval(timer);
   }, [total]);
+
+  if (total === 0) return null;
 
   return (
     <section
       className="relative isolate overflow-hidden bg-[#2D1038]"
-      onMouseEnter={() => (paused.current = true)}
-      onMouseLeave={() => (paused.current = false)}
+    //   onMouseEnter={() => {
+    //     paused.current = true;
+    //   }}
+    //   onMouseLeave={() => {
+    //     paused.current = false;
+    //   }}
     >
       <div className="relative min-h-[460px] sm:min-h-[540px] lg:min-h-[620px]">
-        {SHOP_BANNERS.map((b, i) => (
+        {SHOP_BANNERS.map((banner, index) => (
           <div
-            key={b.collection}
-            aria-hidden={i !== active}
+            key={banner.collection}
+            aria-hidden={index !== active}
             className={`absolute inset-0 transition-opacity duration-[1400ms] ease-in-out ${
-              i === active ? "opacity-100" : "pointer-events-none opacity-0"
+              index === active
+                ? "opacity-100"
+                : "pointer-events-none opacity-0"
             }`}
           >
             <img
-              src={`https://loremflickr.com/1800/1000/${b.kw}?lock=${500 + i}`}
-              alt={b.collection}
-              loading="lazy"
+              src={getBannerImage(banner.collection, banner.kw)}
+              alt={`${banner.collection} lifestyle collection`}
+              loading={index === 0 ? "eager" : "lazy"}
+              fetchPriority={index === 0 ? "high" : "auto"}
+              onError={(event) => {
+                event.currentTarget.src = bannerImages.default;
+              }}
               className={`absolute inset-0 h-full w-full object-cover transition-transform duration-[6000ms] ease-out ${
-                i === active ? "scale-100" : "scale-110"
+                index === active ? "scale-105" : "scale-110"
               }`}
             />
+
             <div className="absolute inset-0 bg-gradient-to-r from-[#2D1038]/95 via-[#4B165C]/70 to-[#4B165C]/20" />
+
             <div className="pointer-events-none absolute inset-4 border border-white/15 sm:inset-8" />
 
-            <div className="relative mx-auto flex h-full max-w-[1440px] items-center px-10 sm:px-20 lg:px-28">
+            <div className="relative mx-auto flex min-h-[460px] max-w-[1440px] items-center px-10 sm:min-h-[540px] sm:px-20 lg:min-h-[620px] lg:px-28">
               <div className="max-w-xl py-16">
                 <div className="mb-5 flex items-center gap-3">
                   <span className="h-px w-10 bg-[#B99A62]" />
+
                   <p className="text-[10px] uppercase tracking-[0.28em] text-[#E8D2A7]">
-                    The Soft Edit · {b.collection}
+                    The Soft Edit · {banner.collection}
                   </p>
                 </div>
+
                 <h2 className="font-serif text-4xl italic leading-[1.1] tracking-[-0.03em] text-[#F7F2EA] sm:text-5xl lg:text-6xl">
-                  {b.headline}
+                  {banner.headline}
                 </h2>
-                <p className="mt-5 max-w-md text-sm leading-7 text-white/85 sm:text-base sm:leading-8">{b.text}</p>
+
+                <p className="mt-5 max-w-md text-sm leading-7 text-white/85 sm:text-base sm:leading-8">
+                  {banner.text}
+                </p>
+
                 <button
                   type="button"
-                  onClick={() => go(`/collection/${slugify(b.collection)}`)}
+                  onClick={() =>
+                    go(`/collection/${slugify(banner.collection)}`)
+                  }
                   className="group mt-8 inline-flex items-center gap-6 border border-[#F7F2EA] bg-[#F7F2EA] px-7 py-4 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#4B165C] transition-all duration-300 hover:-translate-y-1 hover:border-[#B99A62] hover:bg-[#B99A62] hover:text-[#32103D]"
                 >
                   Shop now
-                  <ArrowUpRight size={17} className="transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1" />
+
+                  <ArrowUpRight
+                    size={17}
+                    className="transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1"
+                  />
                 </button>
               </div>
             </div>
           </div>
         ))}
 
-        <ArrowButton dark dir="left" onClick={() => setActive((a) => (a - 1 + total) % total)} className="absolute left-3 top-1/2 z-10 -translate-y-1/2 sm:left-6" />
-        <ArrowButton dark dir="right" onClick={() => setActive((a) => (a + 1) % total)} className="absolute right-3 top-1/2 z-10 -translate-y-1/2 sm:right-6" />
+        <ArrowButton
+          dark
+          dir="left"
+          onClick={() =>
+            setActive((current) => (current - 1 + total) % total)
+          }
+          className="absolute left-3 top-1/2 z-10 -translate-y-1/2 sm:left-6"
+        />
+
+        <ArrowButton
+          dark
+          dir="right"
+          onClick={() => setActive((current) => (current + 1) % total)}
+          className="absolute right-3 top-1/2 z-10 -translate-y-1/2 sm:right-6"
+        />
 
         <div className="absolute inset-x-0 bottom-6 z-10 flex justify-center gap-2">
-          {SHOP_BANNERS.map((b, i) => (
+          {SHOP_BANNERS.map((banner, index) => (
             <button
-              key={b.collection}
+              key={banner.collection}
               type="button"
-              aria-label={`Show ${b.collection} banner`}
-              onClick={() => setActive(i)}
-              className={`h-[3px] rounded-full transition-all duration-500 ${i === active ? "w-10 bg-[#D9BE8B]" : "w-5 bg-white/40"}`}
+              aria-label={`Show ${banner.collection} banner`}
+              aria-current={index === active ? "true" : undefined}
+              onClick={() => setActive(index)}
+              className={`h-[3px] rounded-full transition-all duration-500 ${
+                index === active
+                  ? "w-10 bg-[#D9BE8B]"
+                  : "w-5 bg-white/40"
+              }`}
             />
           ))}
         </div>
@@ -278,6 +479,7 @@ export function ShopBanners({ go }: Pick<CommerceProps, "go">) {
     </section>
   );
 }
+
 
 /* ================= 5. FREQUENTLY ORDERED ================= */
 
@@ -353,56 +555,194 @@ export function BestSellers({ onAddToBag, saved, onToggleSaved, go }: CommercePr
 
 /* ================= 7. SOFT EDIT LOVERS (videos) ================= */
 
-function LoverVideo({ src, title, product }: { src: string; title: string; product: string }) {
+function LoverVideo({
+  src,
+  title,
+  product,
+}: {
+  src: string;
+  title: string;
+  product: string;
+}) {
   const ref = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
+  const [videoError, setVideoError] = useState(false);
+  const [videoReady, setVideoReady] = useState(false);
 
-  function toggle() {
-    const v = ref.current;
-    if (!v) return;
-    if (v.paused) void v.play().then(() => setPlaying(true)).catch(() => {});
-    else {
-      v.pause();
+  useEffect(() => {
+    const video = ref.current;
+    if (!video) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+
+        if (entry.isIntersecting) {
+          void video
+            .play()
+            .then(() => setPlaying(true))
+            .catch(() => {
+              // The play button remains available if autoplay is blocked.
+              setPlaying(false);
+            });
+        } else {
+          video.pause();
+          setPlaying(false);
+        }
+      },
+      {
+        threshold: 0.25,
+      },
+    );
+
+    observer.observe(video);
+
+    return () => {
+      observer.disconnect();
+      video.pause();
+    };
+  }, [src]);
+
+  async function toggle() {
+    const video = ref.current;
+    if (!video) return;
+
+    if (video.paused) {
+      try {
+        await video.play();
+        setPlaying(true);
+      } catch {
+        setPlaying(false);
+      }
+    } else {
+      video.pause();
       setPlaying(false);
     }
   }
 
   return (
-    <div
-      className="group relative aspect-[9/16] w-[62vw] max-w-[270px] shrink-0 snap-start overflow-hidden bg-[#30232F] sm:w-[240px] lg:w-[255px]"
-      onMouseEnter={() => {
-        void ref.current?.play().then(() => setPlaying(true)).catch(() => {});
-      }}
-      onMouseLeave={() => {
-        ref.current?.pause();
-        setPlaying(false);
-      }}
-    >
+    <div className="group relative aspect-[9/16] w-[62vw] max-w-[270px] shrink-0 snap-start overflow-hidden bg-[#30232F] sm:w-[240px] lg:w-[255px]">
       <video
         ref={ref}
         src={src}
         muted
         loop
         playsInline
-        preload="metadata"
-        className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-105"
+        autoPlay
+        preload="auto"
+        onLoadedData={() => {
+          setVideoReady(true);
+          setVideoError(false);
+        }}
+        onPlay={() => setPlaying(true)}
+        onPause={() => setPlaying(false)}
+        onError={() => {
+          setVideoError(true);
+          setPlaying(false);
+        }}
+        className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 group-hover:scale-105"
       />
+
+      {!videoReady && !videoError && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 px-5 text-center text-[#F7F2EA]">
+          <Sparkles size={26} className="text-[#D9BE8B]" />
+          <p className="font-serif text-lg italic">A little moment of softness</p>
+          <p className="text-[10px] tracking-[0.15em] text-white/60">
+            LOADING VIDEO…
+          </p>
+        </div>
+      )}
+
+      {videoError && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-5 text-center text-[#F7F2EA]">
+          <Play size={28} className="text-[#D9BE8B]" />
+          <p className="font-serif text-lg italic">
+            {title}
+          </p>
+          <p className="text-xs leading-6 text-white/70">
+            This video could not be loaded. Please check the video file path.
+          </p>
+        </div>
+      )}
+
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#2D1038]/85 via-transparent to-[#2D1038]/20" />
-      <button
-        type="button"
-        onClick={toggle}
-        aria-label={playing ? `Pause ${title}` : `Play ${title}`}
-        className="absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/70 bg-white/10 text-white backdrop-blur-sm transition-all duration-500 hover:bg-[#B99A62] hover:text-[#30232F]"
-      >
-        {playing ? <Pause size={20} /> : <Play size={20} className="ml-0.5" />}
-      </button>
-      <div className="absolute inset-x-4 bottom-4 text-white">
-        <p className="text-[9px] tracking-[0.2em] text-[#E8D2A7]">{product.toUpperCase()}</p>
+
+      {!videoError && (
+        <button
+          type="button"
+          onClick={() => void toggle()}
+          aria-label={playing ? `Pause ${title}` : `Play ${title}`}
+          className="absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/70 bg-white/10 text-white backdrop-blur-sm transition-all duration-500 hover:bg-[#B99A62] hover:text-[#30232F]"
+        >
+          {playing ? (
+            <Pause size={20} />
+          ) : (
+            <Play size={20} className="ml-0.5" />
+          )}
+        </button>
+      )}
+
+      <div className="pointer-events-none absolute inset-x-4 bottom-4 text-white">
+        <p className="text-[9px] tracking-[0.2em] text-[#E8D2A7]">
+          {product.toUpperCase()}
+        </p>
         <p className="mt-1 font-serif text-lg italic">{title}</p>
       </div>
     </div>
   );
 }
+
+
+// function LoverVideo({ src, title, product }: { src: string; title: string; product: string }) {
+//   const ref = useRef<HTMLVideoElement>(null);
+//   const [playing, setPlaying] = useState(false);
+
+//   function toggle() {
+//     const v = ref.current;
+//     if (!v) return;
+//     if (v.paused) void v.play().then(() => setPlaying(true)).catch(() => {});
+//     else {
+//       v.pause();
+//       setPlaying(false);
+//     }
+//   }
+
+//   return (
+//     <div
+//       className="group relative aspect-[9/16] w-[62vw] max-w-[270px] shrink-0 snap-start overflow-hidden bg-[#30232F] sm:w-[240px] lg:w-[255px]"
+//       onMouseEnter={() => {
+//         void ref.current?.play().then(() => setPlaying(true)).catch(() => {});
+//       }}
+//       onMouseLeave={() => {
+//         ref.current?.pause();
+//         setPlaying(false);
+//       }}
+//     >
+//       <video
+//         ref={ref}
+//         src={src}
+//         muted
+//         loop
+//         playsInline
+//         preload="metadata"
+//         className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-105"
+//       />
+//       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#2D1038]/85 via-transparent to-[#2D1038]/20" />
+//       <button
+//         type="button"
+//         onClick={toggle}
+//         aria-label={playing ? `Pause ${title}` : `Play ${title}`}
+//         className="absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/70 bg-white/10 text-white backdrop-blur-sm transition-all duration-500 hover:bg-[#B99A62] hover:text-[#30232F]"
+//       >
+//         {playing ? <Pause size={20} /> : <Play size={20} className="ml-0.5" />}
+//       </button>
+//       <div className="absolute inset-x-4 bottom-4 text-white">
+//         <p className="text-[9px] tracking-[0.2em] text-[#E8D2A7]">{product.toUpperCase()}</p>
+//         <p className="mt-1 font-serif text-lg italic">{title}</p>
+//       </div>
+//     </div>
+//   );
+// }
 
 export function LoversVideos() {
   return (

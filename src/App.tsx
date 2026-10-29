@@ -454,7 +454,7 @@ function Hero({
     eyebrow: "IT'S LITERALLY THE SOFT EDIT",
     title: ["Live beautifully,", "the soft way."],
     description:
-      "A lifestyle store for pots, bags, mirrors, skincare and the little rituals that make home feel like you. Because self-care is the softest luxury.",
+      "A lifestyle store for everything that makes life pleasant and the little rituals that make home feel like you. Because self-care is the softest luxury.",
     button: "SHOP THE EDIT",
     signature: "Self-care, softly lived",
   };
