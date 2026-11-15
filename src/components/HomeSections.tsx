@@ -35,8 +35,8 @@ import {
   type CommerceProps,
 } from "./ui";
 
-export const INSTAGRAM_URL = "https://www.instagram.com/cristiano/"; // TODO: replace with the CEO's page
-export const WHATSAPP_URL = "https://wa.me/2348139333832";
+export const INSTAGRAM_URL = "https://www.instagram.com/thesoftedit.hq/"; // TODO: replace with the CEO's page
+export const WHATSAPP_URL = "https://wa.me/09113435215";
 
 /* ================= 1. MOVING STRIP ================= */
 
@@ -47,7 +47,7 @@ const ICONS: Record<string, typeof Flower2> = {
   Creams: Droplets,
   Serums: Sparkles,
   Candles: Flame,
-  "Home Decor": Home,
+  "Books": Home,
   "Throws & Linen": Moon,
   Tableware: Coffee,
   "Self-care Basics": Sparkles,
@@ -795,6 +795,8 @@ export function LoversVideos() {
 
 /* ================= 8. BRAND PHILOSOPHY + WHY CHOOSE ================= */
 
+
+
 export function BrandPhilosophy({ go }: Pick<CommerceProps, "go">) {
   const [open, setOpen] = useState(false);
 
@@ -811,21 +813,29 @@ export function BrandPhilosophy({ go }: Pick<CommerceProps, "go">) {
         <div className="flex justify-center">
           <Eyebrow>OUR PHILOSOPHY</Eyebrow>
         </div>
+
         <h2 className="mt-6 font-serif text-4xl leading-[1.1] tracking-[-0.04em] text-[#4B165C] sm:text-5xl md:text-6xl">
           It's literally
           <br />
           <em className="text-[#9A8061]">The Soft Edit.</em>
         </h2>
+
         <p className="mx-auto mt-7 max-w-2xl text-sm leading-8 text-[#7A685E] sm:text-base">
           The Soft Edit is a lifestyle store for the woman who believes beauty lives in the details: the plant pot by the
           window, the bag on your arm, the mirror that catches the morning light, the cream you reach for at night.
           We gather considered essentials that turn everyday moments into small rituals, because looking after yourself
           should feel like a kindness, never another thing on your to-do list.
         </p>
-        <p className="mx-auto mt-6 font-serif text-xl italic text-[#7D8768] sm:text-2xl">{QUOTES[3]}</p>
 
+        <p className="mx-auto mt-6 font-serif text-xl italic text-[#7D8768] sm:text-2xl">
+          {QUOTES[3]}
+        </p>
+
+        {/* WHY CHOOSE THE SOFT EDIT */}
         <div className="mt-12 border-t border-[#E6D9CA] pt-10">
-          <h3 className="font-serif text-2xl text-[#4B165C] sm:text-3xl">Why choose The Soft Edit</h3>
+          <h3 className="font-serif text-2xl text-[#4B165C] sm:text-3xl">
+            Why choose The Soft Edit
+          </h3>
 
           <div
             className={`mx-auto grid max-w-3xl overflow-hidden transition-all duration-700 ease-in-out ${
@@ -843,11 +853,15 @@ export function BrandPhilosophy({ go }: Pick<CommerceProps, "go">) {
             </div>
 
             <div className="mt-12 border border-[#D9C5A4] bg-[#F7F2EA] px-6 py-9 sm:px-12">
-              <p className="text-[10px] tracking-[0.24em] text-[#7D8768]">OUR PROMISE</p>
+              <p className="text-[10px] tracking-[0.24em] text-[#7D8768]">
+                OUR PROMISE
+              </p>
+
               <p className="mt-4 font-serif text-2xl italic leading-snug text-[#4B165C] sm:text-3xl">
                 To keep it soft, honest and beautiful. Quality you can feel, service that cares, and a store that
                 helps you live beautifully.
               </p>
+
               <button
                 type="button"
                 onClick={() => go("/waitlist")}
@@ -858,6 +872,7 @@ export function BrandPhilosophy({ go }: Pick<CommerceProps, "go">) {
             </div>
           </div>
 
+          {/* READ MORE */}
           <button
             type="button"
             onClick={() => setOpen((o) => !o)}
@@ -865,10 +880,139 @@ export function BrandPhilosophy({ go }: Pick<CommerceProps, "go">) {
             className="group mt-8 inline-flex items-center gap-4 border border-[#4B165C] px-8 py-4 text-[10px] font-semibold tracking-[0.16em] text-[#4B165C] transition-all duration-500 hover:bg-[#4B165C] hover:text-[#F7F2EA]"
           >
             {open ? "READ LESS" : "READ MORE"}
-            <ArrowUpRight size={16} className={`transition-transform duration-500 ${open ? "rotate-90" : "group-hover:-translate-y-1 group-hover:translate-x-1"}`} />
+            <ArrowUpRight
+              size={16}
+              className={`transition-transform duration-500 ${
+                open
+                  ? "rotate-90"
+                  : "group-hover:-translate-y-1 group-hover:translate-x-1"
+              }`}
+            />
           </button>
+        </div>
+
+        {/* LUXURY PRE-ORDER CTA — ALWAYS VISIBLE */}
+        <div className="mx-auto mt-14 max-w-xl">
+          <p className="text-[10px] font-medium uppercase tracking-[0.28em] text-[#9A8061]">
+            SOMETHING LOVELY IS WAITING
+          </p>
+
+          <h3 className="mt-4 font-serif text-3xl italic text-[#4B165C] sm:text-4xl">
+            Make it yours.
+          </h3>
+
+          <p className="mx-auto mt-3 max-w-md text-sm leading-7 text-[#7A685E]">
+            Explore our curated collection and reserve the pieces you love through our pre-order experience.
+          </p>
+
+          <button
+            type="button"
+            onClick={() => go("/pre-order")}
+            className="group mt-7 inline-flex items-center justify-center gap-5 rounded-full bg-[#4B165C] px-9 py-4 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#F7F2EA] shadow-[0_8px_25px_rgba(75,22,92,0.12)] transition-all duration-500 hover:-translate-y-1 hover:bg-[#211625] hover:shadow-[0_14px_35px_rgba(75,22,92,0.22)]"
+          >
+            Explore Pre-Order
+            <ArrowUpRight
+              size={16}
+              className="transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1"
+            />
+          </button>
+
+          <div className="mx-auto mt-7 flex items-center justify-center gap-3">
+            <span className="h-px w-8 bg-[#B99A62]/60" />
+            <span className="text-[9px] tracking-[0.2em] text-[#9A8061]">
+              LIVE BEAUTIFULLY
+            </span>
+            <span className="h-px w-8 bg-[#B99A62]/60" />
+          </div>
         </div>
       </div>
     </section>
   );
 }
+
+// export function BrandPhilosophy({ go }: Pick<CommerceProps, "go">) {
+//   const [open, setOpen] = useState(false);
+
+//   const reasons = [
+//     ["Thoughtfully curated", "Every pot, bag, mirror and cream is chosen because it earns its place in your life."],
+//     ["Beauty with intention", "We believe the things you live with should make you feel looked after."],
+//     ["Self-care, everywhere", "From your skin to your shelf, softness belongs in every part of your day."],
+//     ["A lovely delivery", "Carefully packed and sent from our edit to your door."],
+//   ];
+
+//   return (
+//     <section className="relative overflow-hidden bg-[#FBF7F0] px-5 py-20 sm:px-10 sm:py-28 lg:py-32">
+//       <div className="mx-auto max-w-4xl text-center">
+//         <div className="flex justify-center">
+//           <Eyebrow>OUR PHILOSOPHY</Eyebrow>
+//         </div>
+//         <h2 className="mt-6 font-serif text-4xl leading-[1.1] tracking-[-0.04em] text-[#4B165C] sm:text-5xl md:text-6xl">
+//           It's literally
+//           <br />
+//           <em className="text-[#9A8061]">The Soft Edit.</em>
+//         </h2>
+//         <p className="mx-auto mt-7 max-w-2xl text-sm leading-8 text-[#7A685E] sm:text-base">
+//           The Soft Edit is a lifestyle store for the woman who believes beauty lives in the details: the plant pot by the
+//           window, the bag on your arm, the mirror that catches the morning light, the cream you reach for at night.
+//           We gather considered essentials that turn everyday moments into small rituals, because looking after yourself
+//           should feel like a kindness, never another thing on your to-do list.
+//         </p>
+//         <p className="mx-auto mt-6 font-serif text-xl italic text-[#7D8768] sm:text-2xl">{QUOTES[3]}</p>
+
+//         <div className="mt-12 border-t border-[#E6D9CA] pt-10">
+//           <h3 className="font-serif text-2xl text-[#4B165C] sm:text-3xl">Why choose The Soft Edit</h3>
+
+//           <div
+//             className={`mx-auto grid max-w-3xl overflow-hidden transition-all duration-700 ease-in-out ${
+//               open ? "mt-10 max-h-[1400px] opacity-100" : "max-h-0 opacity-0"
+//             }`}
+//             aria-hidden={!open}
+//           >
+//             <div className="grid gap-x-10 gap-y-8 text-left sm:grid-cols-2">
+//               {reasons.map(([t, d]) => (
+//                 <div key={t}>
+//                   <p className="font-serif text-xl text-[#4B165C]">{t}</p>
+//                   <p className="mt-2 text-sm leading-7 text-[#7A685E]">{d}</p>
+//                 </div>
+//               ))}
+//             </div>
+
+//             <div className="mt-12 border border-[#D9C5A4] bg-[#F7F2EA] px-6 py-9 sm:px-12">
+//               <p className="text-[10px] tracking-[0.24em] text-[#7D8768]">OUR PROMISE</p>
+//               <p className="mt-4 font-serif text-2xl italic leading-snug text-[#4B165C] sm:text-3xl">
+//                 To keep it soft, honest and beautiful. Quality you can feel, service that cares, and a store that
+//                 helps you live beautifully.
+//               </p>
+//               <button
+//                 type="button"
+//                 onClick={() => go("/waitlist")}
+//                 className="mt-7 inline-flex items-center gap-4 border-b border-[#B99A62] pb-2 text-[10px] font-semibold tracking-[0.16em] text-[#4B165C] transition-colors hover:text-[#7D8768]"
+//               >
+//                 JOIN THE WAITLIST <ArrowUpRight size={15} />
+//               </button>
+//               <button
+//   onClick={() => navigateTo("/pre-order")}
+//   className="group inline-flex items-center justify-center gap-3 rounded-full bg-[#4B165C] px-7 py-3.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#F7F2EA] transition-all duration-300 hover:bg-[#211625] hover:shadow-[0_10px_30px_rgba(75,22,92,0.2)]"
+// >
+//   Pre-Order
+//   <span className="transition-transform duration-300 group-hover:translate-x-1">
+//     →
+//   </span>
+// </button>
+//             </div>
+//           </div>
+
+//           <button
+//             type="button"
+//             onClick={() => setOpen((o) => !o)}
+//             aria-expanded={open}
+//             className="group mt-8 inline-flex items-center gap-4 border border-[#4B165C] px-8 py-4 text-[10px] font-semibold tracking-[0.16em] text-[#4B165C] transition-all duration-500 hover:bg-[#4B165C] hover:text-[#F7F2EA]"
+//           >
+//             {open ? "READ LESS" : "READ MORE"}
+//             <ArrowUpRight size={16} className={`transition-transform duration-500 ${open ? "rotate-90" : "group-hover:-translate-y-1 group-hover:translate-x-1"}`} />
+//           </button>
+//         </div>
+//       </div>
+//     </section>
+//   );
+// }

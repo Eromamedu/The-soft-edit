@@ -9,14 +9,14 @@ export const FREE_SHIPPING_OVER = 100000;
 export const DISCOUNT_PERCENT = 10;
 
 export const BANK = {
-  bank: "Zenith Bank",
+  bank: "Moniepoint",
   // Exactly as you sent it. NOTE: Nigerian bank account numbers have 10 digits and this has 9,
   // so please double-check it against your Zenith account before launch.
-  accountNumber: "221575836",
-  accountName: "The Soft Edit", // TODO: put the exact account name on the Zenith account
+  accountNumber: "9113435215",
+  accountName: "THE SOFT EDIT LIMITED", // TODO: put the exact account name on the Zenith account
 };
 
-export const OWNER_WHATSAPP = "2348139333832";
+export const OWNER_WHATSAPP = "2349113435215";
 
 export const PAYSTACK_PUBLIC_KEY: string =
   (import.meta as unknown as { env: Record<string, string | undefined> }).env.VITE_PAYSTACK_PUBLIC_KEY ?? "";
@@ -47,6 +47,7 @@ export type Order = {
   id?: string;
   reference: string;
   customer_name: string;
+  order_type?: "standard" | "preorder";
   email: string;
   phone: string;
   address: string;

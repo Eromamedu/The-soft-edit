@@ -2,8 +2,7 @@
 import { useMemo, useState } from "react";
 import {
   ArrowDown,
-  // ArrowLeft,
-  // ArrowRight,
+  ArrowLeft,
   ArrowUpRight,
   Check,
   ChevronDown,
@@ -29,6 +28,7 @@ type FaceCreamCollectionPageProps = {
   onAddToBag: (product: FaceCreamProduct) => void;
   saved: number[];
   onToggleSaved: (id: number) => void;
+  go?: (path: string) => void;
 };
 
 const faceCreamProducts: FaceCreamProduct[] = [
@@ -125,6 +125,7 @@ export default function FaceCreamCollectionPage({
   onAddToBag,
   saved,
   onToggleSaved,
+  go,
 }: FaceCreamCollectionPageProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("featured");
@@ -196,16 +197,32 @@ export default function FaceCreamCollectionPage({
 
   return (
     <div className="min-h-screen bg-[#F7F2EA] text-[#5A4037]">
-      {/* COLLECTION INTRO */}
-      <section className="relative overflow-hidden border-b border-[#B99A62]/20 bg-[#EDE3D7]">
+      {/* LUXURY COLLECTION HERO */}
+      <section className="relative overflow-hidden border-b border-[#B99A62]/25 bg-[#EDE3D7]">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute -right-24 -top-32 h-80 w-80 rounded-full bg-[#B99A62]/10 blur-3xl"
         />
-        
 
-        <div className="relative mx-auto grid max-w-[1600px] items-center gap-8 px-5 pb-12 pt-12 sm:px-10 sm:pb-16 sm:pt-16 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16 lg:px-16 lg:pb-20 lg:pt-20">
+        <div className="relative mx-auto grid max-w-[1600px] items-center gap-10 px-5 py-12 sm:px-10 sm:py-16 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:px-16 lg:py-20">
           <div className="max-w-2xl">
+            {/* BACK TO HOME */}
+            <a
+              href="/"
+              onClick={(event) => {
+                if (go) {
+                  event.preventDefault();
+                  go("/");
+                }
+              }}
+              className="group mb-8 mt-12 inline-flex items-center gap-3 text-[10px] font-semibold tracking-[0.17em] text-[#6E5A50] transition-colors duration-300 hover:text-[#4B165C] sm:mt-14 lg:mt-16"
+            >
+              <span className="flex h-9 w-9 items-center justify-center rounded-full border border-[#B99A62]/60 transition-all duration-300 group-hover:-translate-x-1 group-hover:border-[#4B165C] group-hover:bg-[#4B165C] group-hover:text-white">
+                <ArrowLeft size={15} />
+              </span>
+              BACK TO HOME
+            </a>
+
             <div className="mb-6 flex items-center gap-3">
               <span className="h-px w-9 bg-[#B99A62]" />
               <p className="text-[10px] font-semibold tracking-[0.25em] text-[#8B6A48]">
@@ -224,7 +241,7 @@ export default function FaceCreamCollectionPage({
             </h1>
 
             <p className="mt-6 max-w-lg text-sm leading-7 text-[#6E5A50] sm:text-base sm:leading-8">
-              Meet your skin's new favourite ritual. Thoughtfully selected
+              Meet your skin&apos;s new favourite ritual. Thoughtfully selected
               face creams that bring softness, comfort and everyday
               nourishment to your skincare routine.
             </p>
@@ -233,14 +250,14 @@ export default function FaceCreamCollectionPage({
               href="#face-cream-products"
               className="group mt-8 inline-flex items-center gap-5 border border-[#4B165C] bg-[#4B165C] px-6 py-4 text-[10px] font-semibold tracking-[0.17em] text-[#F7F2EA] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#B99A62] hover:bg-[#B99A62] hover:text-[#30232F]"
             >
-              EXPLORE FACE CREAMS
+              DISCOVER FACE CREAMS
               <ArrowDown
                 size={15}
                 className="transition-transform duration-300 group-hover:translate-y-1"
               />
             </a>
 
-            <div className="mt-10 flex flex-wrap items-center gap-x-7 gap-y-3 border-t border-[#B99A62]/30 pt-6 text-[10px] tracking-[0.12em] text-[#806C5E]">
+            <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-[#B99A62]/30 pt-6 text-[10px] tracking-[0.12em] text-[#806C5E]">
               <span className="flex items-center gap-2">
                 <Sparkles size={14} className="text-[#A17B45]" />
                 YOUR DAILY RITUAL
@@ -251,33 +268,28 @@ export default function FaceCreamCollectionPage({
           </div>
 
           <div className="relative mx-auto w-full max-w-[510px]">
-            <div className="absolute -inset-3 rotate-2 border border-[#B99A62]/35" />
+            <div className="absolute -inset-3 -rotate-2 border border-[#B99A62]/40" />
 
-            <div className="relative aspect-[4/4.4] overflow-hidden bg-[#D9C7B5]">
+            <div className="relative aspect-[4/4.5] overflow-hidden bg-[#DCC8B5]">
               <img
                 src={faceCreamProducts[0].image}
-                alt="Face cream skincare collection"
+                alt="Face cream products for a luxurious skincare ritual"
                 className="h-full w-full object-cover transition-transform duration-1000 hover:scale-[1.04]"
               />
 
-              <div className="absolute inset-0 bg-gradient-to-t from-[#30232F]/45 via-transparent to-[#30232F]/5" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#30232F]/50 via-transparent to-[#30232F]/5" />
 
-              <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-4 border-t border-white/40 pt-4 text-white sm:bottom-7 sm:left-7 sm:right-7">
-                <div>
-                  <p className="text-[9px] tracking-[0.2em] text-white/80">
-                    A SOFTER SKINCARE RITUAL
-                  </p>
-                  <p className="mt-1 font-serif text-2xl italic sm:text-3xl">
-                    Made for your moments.
-                  </p>
-                </div>
-                <span className="mb-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/60">
-                  <ArrowUpRight size={18} />
-                </span>
+              <div className="absolute bottom-5 left-5 right-5 border-t border-white/40 pt-4 text-white sm:bottom-7 sm:left-7 sm:right-7">
+                <p className="text-[9px] tracking-[0.2em] text-white/80">
+                  A SOFTER SKINCARE RITUAL
+                </p>
+                <p className="mt-1 font-serif text-2xl italic sm:text-3xl">
+                  Made for your moments.
+                </p>
               </div>
             </div>
 
-            <div className="absolute -bottom-5 -left-3 hidden bg-[#F7F2EA] px-5 py-4 shadow-[0_10px_35px_rgba(48,35,47,0.10)] sm:block">
+            <div className="absolute -bottom-5 -right-3 hidden bg-[#F7F2EA] px-5 py-4 shadow-[0_10px_35px_rgba(48,35,47,0.10)] sm:block">
               <p className="font-serif text-xl italic text-[#4B165C]">
                 Your skin, gently.
               </p>
@@ -289,7 +301,7 @@ export default function FaceCreamCollectionPage({
         </div>
       </section>
 
-      {/* COLLECTION CONTENT */}
+      {/* PRODUCT COLLECTION */}
       <section
         id="face-cream-products"
         className="mx-auto max-w-[1600px] px-5 py-14 sm:px-10 sm:py-20 lg:px-16"
@@ -309,8 +321,8 @@ export default function FaceCreamCollectionPage({
               </span>
             </h2>
             <p className="mt-3 max-w-xl text-sm leading-6 text-[#806C5E]">
-              Find the finishing touch to your routine, from featherlight
-              hydration to a richer evening ritual.
+              From featherlight daily hydration to richer evening textures,
+              find the finishing touch to your skincare ritual.
             </p>
           </div>
 
@@ -340,11 +352,13 @@ export default function FaceCreamCollectionPage({
               FILTERS
               <ChevronDown
                 size={13}
-                className={`transition-transform ${showFilters ? "rotate-180" : ""}`}
+                className={`transition-transform ${
+                  showFilters ? "rotate-180" : ""
+                }`}
               />
             </button>
 
-            <div className="relative min-w-[210px] flex-1 sm:flex-none">
+            <div className="relative min-w-[200px] flex-1 sm:flex-none">
               <Search
                 size={15}
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-[#98764E]"
@@ -395,7 +409,7 @@ export default function FaceCreamCollectionPage({
           </div>
         )}
 
-        {/* PRODUCT GRID */}
+        {/* FACE CREAM PRODUCT CARDS */}
         {filteredProducts.length > 0 ? (
           <div className="grid grid-cols-2 gap-x-3 gap-y-9 sm:gap-x-5 sm:gap-y-12 md:grid-cols-3 xl:grid-cols-4 xl:gap-x-6">
             {filteredProducts.map((product, index) => {
@@ -403,10 +417,7 @@ export default function FaceCreamCollectionPage({
               const isAdded = addedProductId === product.id;
 
               return (
-                <article
-                  key={product.id}
-                  className="group min-w-0 animate-in fade-in duration-500"
-                >
+                <article key={product.id} className="group min-w-0">
                   <div
                     className="relative isolate aspect-[4/5] overflow-hidden"
                     style={{ backgroundColor: product.color }}
@@ -508,7 +519,7 @@ export default function FaceCreamCollectionPage({
               Nothing found just yet
             </h3>
             <p className="mt-2 text-sm leading-6 text-[#806C5E]">
-              Try a different search or choose another collection filter.
+              Try another search or choose a different collection filter.
             </p>
             <button
               type="button"
@@ -529,7 +540,7 @@ export default function FaceCreamCollectionPage({
         </p>
       </section>
 
-      {/* BRAND PROMISE */}
+      {/* COLLECTION PROMISE */}
       <section className="border-y border-[#B99A62]/25 bg-[#EEE5DA]">
         <div className="mx-auto grid max-w-[1600px] gap-8 px-5 py-10 sm:grid-cols-3 sm:px-10 sm:py-12 lg:px-16">
           <div className="text-center">

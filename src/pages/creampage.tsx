@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import {
   ArrowDown,
   ArrowUpRight,
+  ArrowLeft,
   Check,
   ChevronDown,
   Heart,
@@ -27,6 +28,7 @@ type BodyCreamCollectionPageProps = {
   onAddToBag: (product: BodyCreamProduct) => void;
   saved: number[];
   onToggleSaved: (id: number) => void;
+    go?: (path: string) => void;
 };
 
 const bodyCreamProducts: BodyCreamProduct[] = [
@@ -143,6 +145,7 @@ export default function BodyCreamCollectionPage({
   onAddToBag,
   saved,
   onToggleSaved,
+  go,
 }: BodyCreamCollectionPageProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("featured");
@@ -217,8 +220,25 @@ export default function BodyCreamCollectionPage({
 
         <div className="relative mx-auto grid max-w-[1600px] items-center gap-10 px-5 py-12 sm:px-10 sm:py-16 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:px-16 lg:py-20">
           <div className="max-w-2xl">
+            <a
+              href="/"
+              onClick={(event) => {
+                if (go) {
+                  event.preventDefault();
+                  go("/");
+                }
+              }}
+              // className="group mb-8 inline-flex items-center gap-3 text-[10px] font-semibold tracking-[0.17em] text-[#6E5A50] transition-colors duration-300 hover:text-[#4B165C] mt-5"
+              className="group mb-8 mt-12 inline-flex items-center gap-3 text-[10px] font-semibold tracking-[0.17em] text-[#6E5A50] transition-colors duration-300 hover:text-[#4B165C] sm:mt-14 lg:mt-16"
+            >
+              <span className="flex h-9 w-9 items-center justify-center rounded-full border border-[#B99A62]/60 transition-all duration-300 group-hover:-translate-x-1 group-hover:border-[#4B165C] group-hover:bg-[#4B165C] group-hover:text-white">
+                <ArrowLeft size={15} />
+              </span>
+              BACK TO HOME
+            </a>
             <div className="mb-6 flex items-center gap-3">
               <span className="h-px w-9 bg-[#B99A62]" />
+        
               <p className="text-[10px] font-semibold tracking-[0.25em] text-[#8B6A48]">
                 THE BODY RITUAL
               </p>
@@ -237,7 +257,7 @@ export default function BodyCreamCollectionPage({
             <p className="mt-6 max-w-lg text-sm leading-7 text-[#6E5A50] sm:text-base sm:leading-8">
               Turn the everyday into a little luxury. Discover body creams,
               whipped butters and comforting textures designed to make your
-              after-shower ritual feel like time well spent.
+              after-shower ritual  time well spent.
             </p>
 
             <a

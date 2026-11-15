@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import {
   ArrowDownUp,
   ArrowRight,
+  ArrowLeft,
   ArrowUpRight,
   Check,
   ChevronDown,
@@ -28,6 +29,7 @@ type AllProductsPageProps = {
   onAddToBag: (product: StoreProduct) => void;
   saved: number[];
   onToggleSaved: (id: number) => void;
+    go?: (path: string) => void;
 };
 
 const categories = [
@@ -314,6 +316,7 @@ export default function AllProductsPage({
   onAddToBag,
   saved,
   onToggleSaved,
+  go,
 }: AllProductsPageProps) {
   const [activeCategory, setActiveCategory] = useState("All Products");
   const [search, setSearch] = useState("");
@@ -362,6 +365,21 @@ export default function AllProductsPage({
 
         <div className="relative mx-auto grid max-w-[1500px] items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
           <div>
+             <a
+              href="/"
+              onClick={(event) => {
+                if (go) {
+                  event.preventDefault();
+                  go("/");
+                }
+              }}
+              className="group mb-8 inline-flex items-center gap-3 text-[10px] font-semibold tracking-[0.17em] text-[#6E5A50] transition-colors duration-300 hover:text-[#4B165C]"
+            >
+              <span className="flex h-9 w-9 items-center justify-center rounded-full border border-[#B99A62]/60 transition-all duration-300 group-hover:-translate-x-1 group-hover:border-[#4B165C] group-hover:bg-[#4B165C] group-hover:text-white">
+                <ArrowLeft size={15} />
+              </span>
+              BACK TO HOME
+            </a>
             <div className="mb-7 flex items-center gap-3">
               <span className="h-px w-10 bg-[#D9BE8B]" />
               <p className="text-[10px] uppercase tracking-[0.35em] text-[#D9BE8B] sm:text-xs">
