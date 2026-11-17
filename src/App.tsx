@@ -1211,7 +1211,7 @@ function Hero({
               className="hero-copy-item mb-6 inline-flex items-center justify-center gap-4 border border-[#B99A62] bg-[#B99A62] px-5 py-4 text-[10px] font-semibold tracking-[0.12em] text-[#211820] transition-all duration-500 hover:-translate-y-1 hover:bg-[#D9BE8B] sm:px-7 sm:text-xs sm:tracking-[0.16em]"
               style={{ animationDelay: "600ms" }}
             >
-              PRE-ORDER
+              PRE-ORDER YOUR BOOKS
             </button>
 
             {/* SIGNATURE */}

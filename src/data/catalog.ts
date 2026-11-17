@@ -931,26 +931,26 @@ const rows: Row[] = [
   ["Vitamin C glowing mask", "Creams", 16000, "moisturizer,cream", 9],
   ["The Round lab toner", "Creams", 14500, "shea,butter,skincare", 13],
   ["Lip Mask", "Creams", 19800, "night,cream,skincare", 6],
-  ["Velvet Hand Cream", "Creams", 7800, "hand,cream", 22],
-  ["Daily Veil SPF 50", "Creams", 15500, "sunscreen,skincare", 10, "NEW"],
+  ["Laneige Moisturizer", "Creams", 7800, "hand,cream", 22],
+  ["Collagen Lip Mask", "Creams", 15500, "sunscreen,skincare", 10, "NEW"],
 
-  // Serums
-  ["The Daily Glow Serum", "Serums", 14000, "serum,dropper", 4, "BESTSELLER"],
-  ["Hydra Dew Serum", "Serums", 15200, "hyaluronic,serum", 7],
-  ["Vitamin C Radiance Drops", "Serums", 16800, "vitamin,serum", 5],
-  ["Overnight Repair Elixir", "Serums", 21000, "skincare,bottle", 3],
-  ["Rose Petal Face Mist", "Serums", 9500, "rose,mist,spray", 15],
+  // Serum
+  ["Cudalie Serum", "Serums", 14000, "serum,dropper", 4, "BESTSELLER"],
+  ["Eye Mask", "Serums", 15200, "hyaluronic,serum", 7],
+  ["Mint Foot Lotion", "Serums", 16800, "vitamin,serum", 5],
+  ["Glycolic Body Wash", "Serums", 21000, "skincare,bottle", 3],
+  ["Rhode Facial Ceramide", "Serums", 9500, "rose,mist,spray", 15],
 
   // Candles
-  ["Amber Dusk Candle", "Candles", 13500, "candle,amber", 14, "BESTSELLER"],
-  ["Vanilla Cloud Candle", "Candles", 12500, "vanilla,candle", 17],
-  ["Lavender Hour Candle", "Candles", 12800, "lavender,candle", 11],
-  ["Sandalwood Glow Candle", "Candles", 14800, "sandalwood,candle", 8],
-  ["Mini Votive Trio", "Candles", 8200, "votive,candle", 19],
-  ["Reed Diffuser — Soft Linen", "Candles", 16500, "reed,diffuser", 9, "NEW"],
+  ["Milk Hydrating Mask", "Candles", 13500, "candle,amber", 14, "BESTSELLER"],
+  ["Hydrating Socks", "Candles", 12500, "vanilla,candle", 17],
+  ["Collagen Lip Mask", "Candles", 12800, "lavender,candle", 11],
+  ["Fenty skin toner", "Candles", 14800, "sandalwood,candle", 8],
+  ["Collagen Eye Mask", "Candles", 8200, "votive,candle", 19],
+  ["Spf 50", "Candles", 16500, "reed,diffuser", 9, "NEW"],
 
   // Home Decor
-  ["Sculpted Ceramic Vase", "Home Decor", 24500, "ceramic,vase", 6, "THE EDIT"],
+  ["Fenty  Beauty Lip gloss", "Home Decor", 24500, "ceramic,vase", 6, "THE EDIT"],
   ["Dried Pampas Bundle", "Home Decor", 9800, "pampas,grass", 12],
   ["Linen Table Runner", "Home Decor", 11800, "linen,table,runner", 10],
   ["Marble Trinket Tray", "Home Decor", 14200, "marble,tray", 8],
