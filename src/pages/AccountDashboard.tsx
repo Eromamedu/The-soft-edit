@@ -5732,7 +5732,7 @@ function Hero({
 
                   className={`h-auto object-contain transition-[width,max-width] duration-300 sm:w-[205px] sm:max-w-none md:w-[245px] lg:w-[285px] xl:w-[310px] ${
                     userName
-                      ? "w-[140px] max-w-[36vw]"
+                      ? "w-[170px] max-w-[36vw]"
                       : "w-[195px] max-w-[52vw]"
                   }`}
 
