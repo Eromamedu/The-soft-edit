@@ -657,50 +657,50 @@ import image48 from "../images/IMG-20261115-WA0060.jpg";
 import image49 from "../images/IMG-20261115-WA0061.jpg";
 import image50 from "../images/IMG-20261115-WA0062.jpg";
 import image51 from "../images/IMG-20261115-WA0063.jpg";
-import image52 from "../images/IMG-20261115-WA0064.jpg";
+// import image52 from "../images/IMG-20261115-WA0064.jpg";
 import image53 from "../images/IMG-20261115-WA0065.jpg";
 import image54 from "../images/IMG-20261115-WA0068.jpg";
 import image55 from "../images/books.jpg";
-import image56 from "../images/IMG-20261117-WA0004.jpg";
-import image57 from "../images/IMG-20261117-WA0008.jpg";
-import image58 from "../images/IMG-20261117-WA0011.jpg";
+// import image56 from "../images/IMG-20261117-WA0004.jpg";
+// import image57 from "../images/IMG-20261117-WA0008.jpg";
+// import image58 from "../images/IMG-20261117-WA0011.jpg";
 import image59 from "../images/IMG-20261117-WA0014.jpg";
-import image60 from "../images/IMG-20261117-WA0016.jpg";
+// import image60 from "../images/IMG-20261117-WA0016.jpg";
 import image61 from "../images/IMG-20261117-WA0020.jpg";
 import image62 from "../images/IMG-20261117-WA0022.jpg";
 import image63 from "../images/IMG-20261117-WA0025.jpg";
-import image64 from "../images/IMG-20261117-WA0028.jpg";
-import image65 from "../images/IMG-20261117-WA0029.jpg";
+// import image64 from "../images/IMG-20261117-WA0028.jpg";
+// import image65 from "../images/IMG-20261117-WA0029.jpg";
 import image66 from "../images/IMG-20261117-WA0032.jpg";
-import image67 from "../images/IMG-20261117-WA0038.jpg";
+// import image67 from "../images/IMG-20261117-WA0038.jpg";
 import image68 from "../images/IMG-20261117-WA0041.jpg";
 import image69 from "../images/IMG-20261117-WA0044.jpg";
-import image70 from "../images/IMG-20261117-WA0047.jpg";
-import image71 from "../images/IMG-20261117-WA0051.jpg";
-import image72 from "../images/IMG-20261117-WA0054.jpg";
-import image73 from "../images/IMG-20261118-WA0001.jpg";
-import image74 from "../images/IMG-20261118-WA0002.jpg";
+// import image70 from "../images/IMG-20261117-WA0047.jpg";
+// import image71 from "../images/IMG-20261117-WA0051.jpg";
+// import image72 from "../images/IMG-20261117-WA0054.jpg";
+// import image73 from "../images/IMG-20261118-WA0001.jpg";
+// import image74 from "../images/IMG-20261118-WA0002.jpg";
 import image75 from "../images/IMG-20261118-WA0005.jpg";
-import image76 from "../images/IMG-20261118-WA0010.jpg";
-import image77 from "../images/IMG-20261118-WA0015.jpg";
-import image78 from "../images/IMG-20261118-WA0016.jpg";
-import image79 from "../images/IMG-20261120-WA0018.jpg";
-import image80 from "../images/IMG-20261120-WA0021.jpg";
-import image81 from "../images/IMG-20261120-WA0027.jpg";
-import image82 from "../images/IMG-20261121-WA0002.jpg";
-import image83 from "../images/IMG-20261121-WA0005.jpg";
+// import image76 from "../images/IMG-20261118-WA0010.jpg";
+// import image77 from "../images/IMG-20261118-WA0015.jpg";
+// import image78 from "../images/IMG-20261118-WA0016.jpg";
+// import image79 from "../images/IMG-20261120-WA0018.jpg";
+// import image80 from "../images/IMG-20261120-WA0021.jpg";
+// import image81 from "../images/IMG-20261120-WA0027.jpg";
+// import image82 from "../images/IMG-20261121-WA0002.jpg";
+// import image83 from "../images/IMG-20261121-WA0005.jpg";
 import image84 from "../images/IMG-20261121-WA0011.jpg";
-import image85 from "../images/IMG-20261121-WA0014.jpg";
-import image86 from "../images/IMG-20261121-WA0023.jpg";
-import image87 from "../images/IMG-20261121-WA0029.jpg";
-import image88 from "../images/IMG-20261121-WA0032.jpg";
-import image89 from "../images/IMG-20261121-WA0050.jpg";
+// import image85 from "../images/IMG-20261121-WA0014.jpg";
+// import image86 from "../images/IMG-20261121-WA0023.jpg";
+// import image87 from "../images/IMG-20261121-WA0029.jpg";
+// import image88 from "../images/IMG-20261121-WA0032.jpg";
+// import image89 from "../images/IMG-20261121-WA0050.jpg";
 import image90 from "../images/IMG-20261121-WA0055.jpg";
-import image91 from "../images/IMG-20261121-WA0056.jpg";
-import image92 from "../images/IMG-20261121-WA0058.jpg";
-import image93 from "../images/IMG-20261121-WA0059.jpg";
+// import image91 from "../images/IMG-20261121-WA0056.jpg";
+// import image92 from "../images/IMG-20261121-WA0058.jpg";
+// import image93 from "../images/IMG-20261121-WA0059.jpg";
 import image94 from "../images/IMG-20261121-WA0060.jpg";
-import image95 from "../images/IMG-20261121-WA0061.jpg";
+// import image95 from "../images/IMG-20261121-WA0061.jpg";
 import image97 from "../images/IMG-20261121-WA0064.jpg";
 import image98 from "../images/IMG-20261121-WA0067.jpg";
 import image99 from "../images/IMG-20261121-WA0070.jpg";
@@ -749,6 +749,8 @@ import image143 from "../images/IMG-20261121-WA0176.jpg";
 import image144 from "../images/IMG-20261121-WA0179.jpg";
 import image145 from "../images/IMG-20261121-WA0182.jpg";
 import image146 from "../images/IMG-20261121-WA0185.jpg";
+// import image147 from "../images/IMG-20261123-WA0026(1).jpg";
+
 // import image123 from "../images/IMG-20261121-WA0124.jpg";
 
 // Same order as the rows below:
@@ -764,15 +766,13 @@ const PRODUCT_IMAGES: string[] = [
   image36, image37, image38, image39, image40,
   image41, image42, image43, image44, image45,
   image46, image47, image48, image49, image50,
-  image51, image52, image53, image54, image55,
-  image56, image57, image58, image59, image60,
-  image61, image62, image63, image64, image65, 
-  image66, image67, image68, image69, image70,
-  image71, image72, image73, image74, image75, 
-  image76, image77, image78, image79, image80,
-  image81, image82, image83, image84, image85,
-  image86, image87, image88, image89, image90, 
-  image91, image92, image93, image94, image95,
+  image51,  image53, image54, image55,
+  image59,
+  image61, image62, image63,
+  image66, image68,   image75, 
+  // image76, image77, image78, image79, image80,
+   image84,
+   image90,   image94, 
   image69, image97, image98, image99, image100,
   image101,image102,image103,image104,image105,
   image106, image107, image108, image109, image110,
@@ -1060,33 +1060,34 @@ const rows: Row[] = [
   // Home Decor
   ["Fenty  Beauty Lip gloss", "Home Decor", 35999, "ceramic,vase", 6, "THE EDIT"],
   ["Dried Pampas Bundle", "Home Decor", 165000, "pampas,grass", 12],
-  ["Linen Table Runner", "Home Decor", 11800, "linen,table,runner", 10],
-  ["Marble Trinket Tray", "Home Decor", 14200, "marble,tray", 8],
-  ["Framed Botanical Print", "Home Decor", 19500, "botanical,print,frame", 7],
+  ["Collagen gel mask", "Home Decor", 25800, "linen,table,runner", 10],
+  ["Pore pad", "Home Decor", 39000, "marble,tray", 8],
+  ["Perfume Oil", "Home Decor", 6500, "botanical,print,frame", 7],
 
   // Throws & Linen
-  ["Cloud Knit Throw", "Throws & Linen", 38500, "knit,throw,blanket", 6, "BESTSELLER"],
-  ["Pure Linen Pillowcase Pair", "Throws & Linen", 18500, "linen,pillow,bedroom", 12],
-  ["Velvet Cushion Cover", "Throws & Linen", 11200, "velvet,cushion", 15],
-  ["Silk Sleep Eye Mask", "Throws & Linen", 8800, "silk,sleep,mask", 20, "NEW"],
-  ["Waffle Bath Towel Set", "Throws & Linen", 26500, "bath,towel,spa", 9],
+  ["Fenty body wash", "Throws & Linen", 64000, "knit,throw,blanket", 6, "BESTSELLER"],
+  ["Sports Armband", "Throws & Linen", 20000, "linen,pillow,bedroom", 12],
+  ["Keepsake boxes", "Throws & Linen", 36900, "velvet,cushion", 15],
+  ["Fenty beauty lig gloss", "Throws & Linen", 35999, "silk,sleep,mask", 20, "NEW"],
+  ["rhode cream", "Throws & Linen", 42500, "bath,towel,spa", 9],
 
   // Tableware
-  ["Stoneware Dinner Plate Set", "Tableware", 32500, "stoneware,plates", 7],
-  ["Glazed Coffee Mug Duo", "Tableware", 10500, "ceramic,mug,coffee", 16],
-  ["Gold Cutlery Set", "Tableware", 28800, "gold,cutlery", 5, "THE EDIT"],
-  ["Crystal Tumbler Pair", "Tableware", 13800, "crystal,glass,tumbler", 11],
-  ["Ceramic Teapot & Cups", "Tableware", 24800, "teapot,tea,ceramic", 6],
+  ["Biodance Seakelp mask", "Tableware", 36900, "stoneware,plates", 7],
+  ["Pro-collagen cleansing balm", "Tableware", 131794, "ceramic,mug,coffee", 16],
+    ["Biodance bio-collagen mask", "Tableware", 36900, "stoneware,plates", 7],
+  // ["Gold Cutlery Set", "Tableware", 28800, "gold,cutlery", 5, "THE EDIT"],
+  ["Roundlab toner", "Tableware", 36900, "crystal,glass,tumbler", 11],
+  ["Rhode lip gloss", "Tableware", 24800, "teapot,tea,ceramic", 6],
 
   // Self-care Basics
-  ["Bamboo Bath Tray", "Self-care Basics", 19800, "bath,tray,bamboo", 7],
-  ["Jade Face Roller", "Self-care Basics", 7800, "jade,roller,skincare", 18],
-  ["Silk Scrunchie Set", "Self-care Basics", 6200, "silk,scrunchie", 25, "NEW"],
-  ["Bath Salts — Eucalyptus", "Self-care Basics", 8800, "bath,salts,spa", 14],
-  ["Journal & Pen Gift Set", "Self-care Basics", 12500, "journal,notebook,pen", 13, "BESTSELLER"],
+  ["Baylis & Harding present boxes", "Self-care Basics", 36900, "bath,tray,bamboo", 7],
+  ["Thrill seeker glassy gloss", "Self-care Basics", 22500, "jade,roller,skincare", 18],
+  // ["Silk Scrunchie Set", "Self-care Basics", 6200, "silk,scrunchie", 25, "NEW"],
+  ["Premium Incense cones ", "Self-care Basics", 7800, "bath,salts,spa", 14],
+  ["Foot Scrub", "Self-care Basics", 1000, "journal,notebook,pen", 13, "BESTSELLER"],
 
   // Books
-  ["The Soft Edit Books", "Books", 14990 , "journal,book", 24, "NEW"],
+  ["The Soft Edit Journal", "Books", 14990 , "journal,book", 24, "NEW"],
   ["Feminelle Body-wash ", "Self-care Basics", 16790, "journal,notebook,pen", 13, "BESTSELLER"],
   ["Whole body deodorant", "Self-care Basics", 14900, "journal,notebook,pen", 13, "BESTSELLER"],
   ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
@@ -1145,34 +1146,34 @@ const rows: Row[] = [
   ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
   ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
   ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
-  ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
-  ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
-  ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
-  ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
-  ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
-  ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
-  ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
-  ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
-  ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
-  ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
-  ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
-  ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
-  ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
-  ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
-  ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
-  ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
-  ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
-  ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
-  ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
-  ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
-  ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
-  ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
-  ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
-  ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
-  ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
-  ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
-  ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
-  ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
+  // ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
+  // ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
+  // ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
+  // ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
+  // ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
+  // ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
+  // ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
+  // ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
+  // ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
+  // ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
+  // ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
+  // ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
+  // ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
+  // ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
+  // ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
+  // ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
+  // ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
+  // ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
+  // ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
+  // ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
+  // ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
+  // ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
+  // ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
+  // ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
+  // ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
+  // ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
+  // ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
+  // ["Feminelle Body-wash ", "Self-care Basics", 14990, "journal,notebook,pen", 13, "BESTSELLER"],
 
 
   
